@@ -1,0 +1,34 @@
+= 30分でわかるJavaScriptプログラマのためのモナド入門
+Ken Okabe <kentutorialbook@gmail.com>
+:keywords:  monad, JavaScript, ECMAScript, Promise, FRP, timeline
+:description: timeline FRP Monad
+:homepage:    https://kenokabe.github.io/timeline-monad/
+:source:      https://github.com/kenokabe/timeline-monad
+:toc:
+:sectnums:
+:toclevels: 2
+:source-highlighter: highlightjs
+:highlightjs-theme: solarized-dark
+:imagesdir: ./img/ 
+:stem: latexmath
+ 
+++++
+<style type="text/css">
+p >code {background-color: #dddddd};　
+</style>
+++++
+
+
+:leveloffset: 1
+ 
+include::./ch_01.adoc[]
+
+include::./ch_02.adoc[]
+
+include::./ch_03.adoc[]
+
+include::./ch_04.adoc[]
+
+include::./ch_05.adoc[]
+
+include::./ch_06.adoc[]

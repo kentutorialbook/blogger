@@ -1,0 +1,172 @@
+
+= モナドとは何か？
+ifndef::stem[:stem: latexmath]
+ifndef::imagesdir[:imagesdir: ../img/]
+ifndef::source-highlighter[:source-highlighter: highlightjs]
+
+ifndef::highlightjs-theme:[:highlightjs-theme: solarized-dark]
+
+++++
+<style type="text/css">
+p >code {background-color: #dddddd};　
+</style>
+++++
+
+
+> Haskellerにとっては「モナドとはすでに手元にあるもの」であり、手元あるいは、足場となる言語を活用するための学習モティベーションも極めて高い。裏を返すと、Haskellerでないその他大勢のプログラマにとっては以上の事実は逆風となる。 <<ch_01.adoc#_モナドを理解するのが難しい理由>>
+
+さらに裏を返すと、JavaScriptプログラマにとっては、JavaScriptですでにモナドが実装されていて、使えればそれなりにすぐ恩恵がある、とわかれば、テンションもあがるんじゃないでしょうか？
+
+ここでは、とりあえずモナドの理論的背景については保留して（後でじっくりやる）、モナドがどんなものか？論より証拠、習うより慣れろ（この手の解説記事ではわかったつもりにさせられる危険もあるので諸刃）でJavaScriptのモナドを触ってみましょう。
+
+== 触ってみよう！JavaScriptのモナド
+
+「全部がモナドではないが一部は確実にモナドである」ってどういう意味？っていうのもここでわかります。
+
+全部がモナドではないが一部は確実にモナドである、という事例として、最近のJavaScriptのlink:https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array[Array]があげられます。
+
+> JavaScript の Array オブジェクトは、配列を構築するためのグローバルオブジェクトで、配列とは複数の要素の集合を格納管理するリスト構造です。
+
+モナドを紹介するにあたって、Arrayが優れているのは、
+
+- すでに手元にある。すぐに触れる。最新のモダンブラウザやNode.jsならすでに実装済みだ。得体のしれない誰かのモナド実装コードを解読する必要なし。
+
+- 馴染み深い。誰でも知ってる。みんな使える。基本的API。かんたん。
+
+- 見える。コンソール出力したときの値はそのまま値の構造を表している。どうなっているのか一目でわかるので理解も容易。
+
+と三拍子揃っています。
+
+
+== Array.map
+
+https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/map[Array.map]は、配列の構造(リスト構造)を保ったまま、値にある関数を適用した結果の値を返す、関数です。
+
+`[1, 2, 3, 4, 5]`
+に、 + 
+値を2倍する関数 + 
+`a => a * 2`
+を `.map`　すると、 + 
+`[2, 4, 6, 8, 10]` +
+が返ってきます。
+
+
+[source,js]
+.Array.map.js
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 =
+    array1
+        .map(a => a * 2);
+
+console.log(array2);
+----
+
+[source,js]
+.Console
+----
+[ 2, 4, 6, 8, 10 ]
+----
+
+
+ここでポイントは、配列の `.map` 前と後で
+
+1. **構造を保ったまま、要素を１:１で転写(map)する**、配列の要素数は変化しない
+2. **自分自身＝Arrayオブジェクトを返してくる**
+
+ことです。
+
+
+[CAUTION]
+.Functor??
+====
+圏論の用語では、
+
+1. **構造を保ったまま、要素を１:１で転写(map)する**、配列の要素数は変化しない
+2. **自分自身＝Arrayオブジェクトを返してくる**
+
+
+このような性質を備えるオブジェクトのことを、 + 
+https://ncatlab.org/nlab/show/endofunctor[Endofunctor](自己関手)と呼びます。
+
+`Array.map` は、自分自身＝Arrayオブジェクトを返してくる、というのは非常に重要な特性があるので、そこを明示しておくためには、この **endo-/自己**というのは絶対に外せないわけですが、Haskellコミュニティの因習から、単に、 + 
+https://ncatlab.org/nlab/show/functor[Functor](関手)
+と呼んでしまうことが多いです。
+
+転写(map)する先が、自分自身のオブジェクトではなくて、別のオブジェクトでもなんでも構わないのであれば、
+
+`[1, 2, 3, 4, 5]`  + 
+↓ + 
+`{
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5
+}`
+
+でも良いわけで、それが本来のFunctor(関手)の一般的な振る舞いです。
+
+挙げ句の果てには、link:https://www.quora.com/Why-is-functor-in-Haskell-defined-like-the-endofunctor-from-category-theory[Why is functor in Haskell defined like the endofunctor from category theory?](なぜ、Haskellのfunctorは、圏論のendofunctorみたいな定義になってるの？)という極めてまっとうな疑問が出て、"Convenience and history." 便利さと歴史的経緯のせいだ。(中略) Endofunctorという型クラス（type class）名よりも、Functorという名前のほうが" much nicer name"だ。正確じゃないかもしれないが機能している・・・ +
+ と、こういったノリです。しかし圏論用語だとだけ聞かされている初学者にとってはそんなことは知ったことではないわけで、この混乱による質問は定期的に出るようです。
+
+ちなみに、link:http://learnyouahaskell.com/chapters[Learn You a Haskell for Great Good!](無料公開中)（有料日本語訳『すごいHaskellたのしく学ぼう!』）にも、Endofuntorは単にFunctorとだけ書かれているし、「型クラスの命名のことだから」という問題ではなく、条件が違うから別の名前がついている別の数学的実体だし、実際某所で「圏論のFunctorとHaskellのFunctorでは【意味】が違う」と言ってる人も見ているので、今からでも遅くないのでちゃんと直したらどうか？と思うわけです。
+
+プログラマ界隈では、ReferenceTransparency(参照透過性)にしろ、もともとの用語とは違った不正確な意味を天下り的に教えられて、その不正確な意味を知っていて当然、のようなことが横行しているので要注意。
+====
+
+
+
+自分自身＝Arrayオブジェクトを返してくる、という特性により、メソッドチェーンが可能です。
+
+[source,js]
+.Array.map.js
+----
+const array2 =
+    array1
+        .map(a => a * 2)
+        .map(a => a + 1);
+
+console.log(array2);
+----
+
+[source,js]
+.Console
+----
+[ 3, 5, 7, 9, 11 ]
+----
+
+jQueryが便利だ、というのも、モナドどうこう言う以前に、ほとんど、このEndofunctor(自己関手)の性質の良さによるメソッドチェーンが大きいです。
+
+さらに、（冒頭で指摘した）IOが純粋関数型で処理できるからモナドがマジカルだという錯覚についても、別にモナドを持ち出すまでもなく、このEndofunctor(自己関手)だけで実現可能です。
+
+
+
+
+
+
+
+
+
+[NOTE]
+.入れ子構造
+====
+ただし、構造を保ったまま、といえども、渡す関数を、
+
+`a => a * 2`　+ 
+ではなく、 + 
+`a => [a * 2]` + 
+とすることで
+
+
+[source,js]
+.Console
+----
+[ [ 2 ], [ 4 ], [ 6 ], [ 8 ], [ 10 ] ]
+----
+
+と、各要素の階層を追加することは可能です。
+====
+
+
