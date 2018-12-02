@@ -8,7 +8,7 @@ ifndef::highlightjs-theme:[:highlightjs-theme: solarized-dark]
 
 ++++
 <style type="text/css">
-p >code {background-color: #dddddd};　
+p >code {background-color: #aaaaaa};　
 </style>
 ++++
 
@@ -17,17 +17,13 @@ p >code {background-color: #dddddd};　
 
 さらに裏を返すと、JavaScriptプログラマにとっては、JavaScriptですでにモナドが実装されていて、使えればそれなりにすぐ恩恵がある、とわかれば、テンションもあがるんじゃないでしょうか？
 
-ここでは、とりあえずモナドの理論的背景については保留して（後でじっくりやる）、モナドがどんなものか？論より証拠、習うより慣れろ（この手の解説記事ではわかったつもりにさせられる危険もあるので諸刃）でJavaScriptのモナドを触ってみましょう。
-
-== 触ってみよう！JavaScriptのモナド
-
 「全部がモナドではないが一部は確実にモナドである」ってどういう意味？っていうのもここでわかります。
 
 全部がモナドではないが一部は確実にモナドである、という事例として、最近のJavaScriptのlink:https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array[Array]があげられます。
 
-> JavaScript の Array オブジェクトは、配列を構築するためのグローバルオブジェクトで、配列とは複数の要素の集合を格納管理するリスト構造です。
+> JavaScript の `Array` オブジェクトは、配列を構築するためのグローバルオブジェクトで、配列とは複数の要素の集合を格納管理するリスト構造です。
 
-モナドを紹介するにあたって、Arrayが優れているのは、
+モナドを紹介するにあたって、`Array` が優れているのは、
 
 - すでに手元にある。すぐに触れる。最新のモダンブラウザやNode.jsならすでに実装済みだ。得体のしれない誰かのモナド実装コードを解読する必要なし。
 
@@ -37,6 +33,9 @@ p >code {background-color: #dddddd};　
 
 と三拍子揃っています。
 
+
+まずは、`Array`　のモナドではない部分を復習して、それからモナドである部分を紹介します。
+ 
 
 == Array.map
 
@@ -73,55 +72,50 @@ console.log(array2);
 ここでポイントは、配列の `.map` 前と後で
 
 1. **構造を保ったまま、要素を１:１で転写(map)する**、配列の要素数は変化しない
-2. **自分自身＝Arrayオブジェクトを返してくる**
+2. **自分自身＝ `Array` オブジェクトを返してくる**
 
 ことです。
 
 
 [CAUTION]
-.Functor??
+.Functor??　**Haskellに寄りすぎ問題**、再度勃発！
 ====
 圏論の用語では、
 
-1. **構造を保ったまま、要素を１:１で転写(map)する**、配列の要素数は変化しない
+1. **構造を保ったまま、要素を１:１で転写(map)する**、配列の要素数も変化しない
 2. **自分自身＝Arrayオブジェクトを返してくる**
 
 
 このような性質を備えるオブジェクトのことを、 + 
 https://ncatlab.org/nlab/show/endofunctor[Endofunctor](自己関手)と呼びます。
 
-`Array.map` は、自分自身＝Arrayオブジェクトを返してくる、というのは非常に重要な特性があるので、そこを明示しておくためには、この **endo-/自己**というのは絶対に外せないわけですが、Haskellコミュニティの因習から、単に、 + 
-https://ncatlab.org/nlab/show/functor[Functor](関手)
-と呼んでしまうことが多いです。
+https://ncatlab.org/nlab/show/functor[Functor](関手)の定義は、任意の２つのオブジェクト間の転写(map)をするオブジェクトなので、たとえば、
 
-転写(map)する先が、自分自身のオブジェクトではなくて、別のオブジェクトでもなんでも構わないのであれば、
+Array（配列）→Object（オブジェクト）とすると、
 
 `[1, 2, 3, 4, 5]`  + 
 ↓ + 
-`{
-    one: 1,
-    two: 2,
-    three: 3,
-    four: 4,
-    five: 5
-}`
+`{ first: 1, second: 4, third: 6, fourth: 8, fifth: 10 }`
 
-でも良いわけで、それが本来のFunctor(関手)の一般的な振る舞いです。
+となります。
 
-挙げ句の果てには、link:https://www.quora.com/Why-is-functor-in-Haskell-defined-like-the-endofunctor-from-category-theory[Why is functor in Haskell defined like the endofunctor from category theory?](なぜ、Haskellのfunctorは、圏論のendofunctorみたいな定義になってるの？)という極めてまっとうな疑問が出て、"Convenience and history." 便利さと歴史的経緯のせいだ。(中略) Endofunctorという型クラス（type class）名よりも、Functorという名前のほうが" much nicer name"だ。正確じゃないかもしれないが機能している・・・ +
- と、こういったノリです。しかし圏論用語だとだけ聞かされている初学者にとってはそんなことは知ったことではないわけで、この混乱による質問は定期的に出るようです。
+転写(map)先を自分自身であるArrayに限定した特殊なFunctorがEndofunctor(自己関手)となります。
 
-ちなみに、link:http://learnyouahaskell.com/chapters[Learn You a Haskell for Great Good!](無料公開中)（有料日本語訳『すごいHaskellたのしく学ぼう!』）にも、Endofuntorは単にFunctorとだけ書かれているし、「型クラスの命名のことだから」という問題ではなく、条件が違うから別の名前がついている別の数学的実体だし、実際某所で「圏論のFunctorとHaskellのFunctorでは【意味】が違う」と言ってる人も見ているので、今からでも遅くないのでちゃんと直したらどうか？と思うわけです。
+`Array.map` は、自分自身＝ `Array` オブジェクトを返してくる、というのは非常に重要な特性があり、Endofunctor(自己関手)ですが、Haskellコミュニティの因習から、単に、Functorと呼んでしまうことが多いです。
 
-プログラマ界隈では、ReferenceTransparency(参照透過性)にしろ、もともとの用語とは違った不正確な意味を天下り的に教えられて、その不正確な意味を知っていて当然、のようなことが横行しているので要注意。
+link:https://www.quora.com/Why-is-functor-in-Haskell-defined-like-the-endofunctor-from-category-theory[**Why is functor in Haskell defined like the endofunctor from category theory?**](**なぜ、Haskellのfunctorは、圏論のendofunctorみたいな定義になってるの？**)という極めてまっとうな疑問が出て、"Convenience and history." 便利さと歴史的経緯のせいだ。(中略) Endofunctorという型クラス（type class）名よりも、Functorという名前のほうが" much nicer name"だ。正確じゃないかもしれないが機能している・・・ +
+ と、こういったノリです。しかし圏論用語だからとだけ聞かされている初学者にとってはそんなことは知ったことではないわけで、この混乱による質問は定期的に出るようです。
+
+ちなみに、link:http://learnyouahaskell.com/chapters[Learn You a Haskell for Great Good!](無料公開中)（有料日本語訳『すごいHaskellたのしく学ぼう!』）にも、Endofuntorは単にFunctorとだけ書かれているし、「型クラスの命名のノリのことだから些細だ」という問題ではなく、条件に特殊性があるので別の名前がついている別の数学的実体だし、**圏論のFunctorとプログラミングのFunctorでは【意味】が違う**と言ってる人も見てきているので、今からでも遅くないのでちゃんと直したらどうか？と思うわけです。厳密な定義をもつ専門用語全開ぽいので真に受けて聞いていたら、後で「意味が違う」とか「おいちょっと待てよ」と思います。話が通じなくなるので困るのですよね。大事なことなのでここでちゃんと書いておきます。
+
+プログラマ界隈では、ReferenceTransparency(参照透過性)にしろ、もともとの用語の意味が完全に損なわれた不正確な意味で用語を天下り的に教えられて、その不正確な意味を知っていて当然、のようなことが横行しているので要注意。
 ====
 
 
-
-自分自身＝Arrayオブジェクトを返してくる、という特性により、メソッドチェーンが可能です。
+`Array` は、`.map` メソッドで自分自身＝ `Array` オブジェクトを返してくる、Endofunctor(自己関手)の特性の良さにより、メソッドチェーンが可能です。
 
 [source,js]
-.Array.map.js
+.メソッドチェーン
 ----
 const array2 =
     array1
@@ -137,16 +131,11 @@ console.log(array2);
 [ 3, 5, 7, 9, 11 ]
 ----
 
-jQueryが便利だ、というのも、モナドどうこう言う以前に、ほとんど、このEndofunctor(自己関手)の性質の良さによるメソッドチェーンが大きいです。
+`Array.map` のメソッドチェーンの連鎖では、`Array` がデータとしてずっと流れていて、エコの統一性が保証されています。
+
+jQueryが便利だ、というのも、モナドどうこう言う以前に、ほとんど、このEndofunctor(自己関手)の特性が大きいです。
 
 さらに、（冒頭で指摘した）IOが純粋関数型で処理できるからモナドがマジカルだという錯覚についても、別にモナドを持ち出すまでもなく、このEndofunctor(自己関手)だけで実現可能です。
-
-
-
-
-
-
-
 
 
 [NOTE]
@@ -168,5 +157,156 @@ jQueryが便利だ、というのも、モナドどうこう言う以前に、�
 
 と、各要素の階層を追加することは可能です。
 ====
+
+
+== Array.mapと関数型プログラミングの限界
+
+そんなにEndofunctor(自己関手)性質良いなら、モナドの立場は？？モナドの意味は？何が良いの、違うの？となるわけですが、ここの差分をきっちり理解しておくことが重要です。
+
+[source,js]
+.メソッドチェーン
+----
+const array2 =
+    array1
+        .map(a => a * 2)
+        .map(a => a + 1);
+----
+
+という一連のシークエンスを再利用可能とするために関数化します。
+　
+[source,js]
+.f関数の定義
+----
+
+const f = array =>
+    array
+        .map(a => a * 2)
+        .map(a => a + 1);
+----
+
+関数を利用します。
+
+
+[source,js]
+.f関数の利用
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 = f(array1);　<1>
+
+console.log(array2);
+----
+
+<1> `f` 関数の利用
+
+[source,js]
+.Console
+----
+[ 3, 5, 7, 9, 11 ]
+----
+
+
+想定通りの振る舞いで何の問題もありません。
+
+ただし、これまで、`Array` 操作は、`.map` のメソッドチェーンで実現していたのに、`f(array1)`　とSyntaxが変わったことが気になります。
+
+
+> `Array.map` のメソッドチェーンの連鎖では、`Array` がデータとしてずっと流れていて、エコの統一性が保証されています。
+
+という観点からは。`Array.map` のメソッドチェーンを再利用するための関数 `f` を定義したはいいが、この関数は本当にこの `Array` エコに合致するのか？その保証がほしいです。
+
+ひとつの方法としては、TypeScriptを使って、定義した関数の入力値/出力値の両方に `Array` の型付けをして、TypeScriptトランスパイラにチェックさせる方法があり、これは当然推奨されます。
+
+しかしそれでもなお `Array.map(f)` のメソッドチェーンから飛び出して、`f(array1)`　とSyntaxが変わったエコの不整合さは解消されません。
+
+適用したい関数 `f` が先きてかっこでくくるのが普通の関数適用、メソッドチェーンでは尻尾に `f` つけていますね。ここは結構重要で、メソッドチェーンのエレガントさは、チェーンの後に、また中間でも、追加、挿入自由自在なところにあります。
+
+たとえば、複数回連続して、`f` 適用したい場合、
+
+`f(f(array))` +  
+は可読性が悪く「なんとか地獄」の様相なので + 
+ `Array.map(f).map(f)` + 
+
+と連鎖で平らに書けたほうが良いですよね？
+
+
+[TIP]
+.ピンと来た人はご名答
+====
+ES６+Promiseで、「コールバック地獄」から開放される、とか言ってるのも、まさにこの話に対応しています。
+====
+
+`f` というのは、そもそもメソッドチェーンの再利用関数だったので、それを再度、メソッドチェーンの中で使うっていうことなので、メソッドチェーンの入れ子構造って可能なの？ってお話をしています。
+
+入れ子構造っていうのは、関数型プログラミングのお家芸というか、自由自在になんでも組み合わせができてなんぼの関数型プログラミングです。今、関数型プログラミングの限界を試しているところです。我々はどこまで行けるのか？
+
+
+
+`Array.map` のメソッドチェーンでいけるかどうか？ダメ元で試してみましょうか。
+
+　
+[source,js]
+.f関数の利用@map ダメ元
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 =
+    array1.map(f);　<1>
+
+console.log(array2);
+----
+
+<1> `Array.map(f)` のダメ元チャレンジ
+
+[source,shell]
+.Console
+----
+TypeError: array.map is not a function
+----
+
+TypeError つまり型が合いませんでした。
+
+じゃあ、`.map` 元がとりあえず　`Array` にだけなるよう　`[]` でくくって再チャレンジ。
+
+[source,js]
+.f関数の利用@map 再チャレンジ
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 =
+    [array1].map(f);　<1>
+
+console.log(array2);
+----
+
+<1> `[]` でくくって `[array1]` とする 
+
+[source,shell]
+.Console
+----
+[ [ 3, 5, 7, 9, 11 ] ]
+----
+
+いちおう通って `Array` が出てきました！
+
+しかし、残念ながら期待していた
+
+[source,js]
+.Console
+----
+[ 3, 5, 7, 9, 11 ]
+----
+
+とはならず、二重の `Array` になってしまっています。
+
+もうにっちもさっちもいかないので、ここが `Array.map` の関数型プログラミングでの限界です。
+
+`Array.map` は、自分自身＝ `Array` を返すというEndofunctor(自己関手)の特性があり、メソッドチェーンが出来るのだが、**メソッドチェーンが入れ子構造になると、自身の構造をコントロールできなくなる** のです。
+
+関数型プログラミングにとって、これは結構な大問題だとは思いませんか？
+
+== Array.flat の登場
+
+
 
 

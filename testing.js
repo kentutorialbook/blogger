@@ -1,21 +1,17 @@
-const array1 = [1, 2, 3, 4, 5];
 
 
 const f = array =>
     array
-        .flatMap(a => [a * 2])
-        .flatMap(a => [a + 1]);
+        .map(a => a * 2)
+        .map(a => a + 1);
 
 
+const array1 = [1, 2, 3, 4, 5];
 
-const array2 =
-    [array1].flatMap(f);
+const array2 = [array1].map(f);
 
 
 console.log(array2);
-
-
-
 
 
 
