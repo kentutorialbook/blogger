@@ -2,7 +2,7 @@
 [[relation]]
 = 代数学と関数型プログラミングとオブジェクト指向の用語・記法の相互関係
 ifndef::stem[:stem: latexmath]
-ifndef::imagesdir[:imagesdir: ../img/]
+ifndef::imagesdir[:imagesdir: ./img/]
 
 ++++
 <style type="text/css">

@@ -1,7 +1,7 @@
 
 = なぜモナドか
 ifndef::stem[:stem: latexmath]
-ifndef::imagesdir[:imagesdir: ../img/]
+ifndef::imagesdir[:imagesdir: ./img/]
 
 JavaScript上で実用的だから。
 

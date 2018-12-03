@@ -14,6 +14,20 @@ const array2 = [array1].map(f);
 console.log(array2);
 
 
+const unit = Array.of;
+
+console.log(
+    unit(7)
+);
+
+
+console.log(
+    [[7]].flat()
+);
+
+console.log(
+    [7].flat()
+);
 
 /*
 

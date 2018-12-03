@@ -1,7 +1,7 @@
 
 = JavaScriptプログラマのためのモナド入門
 ifndef::stem[:stem: latexmath]
-ifndef::imagesdir[:imagesdir: ../img/]
+ifndef::imagesdir[:imagesdir: ./img/]
 
 これは、一般的なJavaScriptプログラマのためのモナド入門記事です。
 

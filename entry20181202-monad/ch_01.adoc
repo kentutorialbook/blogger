@@ -1,6 +1,6 @@
 = モナドが難しい？
 ifndef::stem[:stem: latexmath]
-ifndef::imagesdir[:imagesdir: ../img/]
+ifndef::imagesdir[:imagesdir: ./img/]
 
 巷の解説が混乱に満ちあふれている・・・
 
