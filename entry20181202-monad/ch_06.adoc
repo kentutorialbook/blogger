@@ -3,6 +3,13 @@
 ifndef::stem[:stem: latexmath]
 ifndef::imagesdir[:imagesdir: ../img/]
 
+++++
+<style type="text/css">
+p >code {background-color: #aaaaaa};　
+td >code {background-color: #aaaaaa};
+</style>
+++++
+
 モノイドは、理解するのが簡単、しかし奥が深く、モナドと同じかそれ以上に関数型プログラミングで応用局面もあり実用性が高いという、費用対効果（コスパ）抜群です。
 
 だいたい、モナドを知りたいのなら、まずモノイドを知っておくべきなのは当たり前のことなのですが、ここまでモナド偏重でモノイドについてはあまり語られないのは、<<_モナドを理解するのが難しい理由>>の事情が原因です。

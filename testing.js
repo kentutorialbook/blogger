@@ -1,44 +1,24 @@
 
 
 const f = array =>
-    array
-        .map(a => a * 2)
-        .map(a => a + 1);
-
+    [array]
+        .flatMap(a => a * 2)
+        .flatMap(a => a + 1);
 
 const array1 = [1, 2, 3, 4, 5];
 
-const array2 = [array1].map(f);
-
+const array2 = array1.flatMap(f);
 
 console.log(array2);
 
 
-const unit = Array.of;
-
-console.log(
-    unit(7)
-);
 
 
-console.log(
-    [[7]].flat()
-);
 
-console.log(
-    [7].flat()
-);
+
 
 /*
 
-
-const array2 = array1
-    .flatMap(a =>
-
-        a % 2 === 1
-            ? [[a]]
-            : [[]]
-    )
 
 
 

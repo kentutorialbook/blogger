@@ -6,10 +6,15 @@ ifndef::imagesdir[:imagesdir: ./img/]
 
 ++++
 <style type="text/css">
-p >code {background-color: #dddddd};　
+p>code {background-color: #aaaaaa};
+
+th,td {
+    border: solid 1px;  
+}　
+td>code {background-color: #aaaaaa};
+} 
 </style>
 ++++
-
 
 とりあえずさっさと「モナドとは何か？」の説明を具体例をもって進めたいところですが、曖昧になっている要素を排除し、きちんと説明の土壌を整備しておいたほうが良いので、急がば廻れの精神で先にやっておきます。
 

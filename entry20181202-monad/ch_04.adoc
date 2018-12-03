@@ -8,7 +8,13 @@ ifndef::highlightjs-theme:[:highlightjs-theme: solarized-dark]
 
 ++++
 <style type="text/css">
-p >code {background-color: #aaaaaa};　
+p>code {background-color: #aaaaaa};
+
+th,td {
+    border: solid 1px;  
+}　
+td>code {background-color: #aaaaaa};
+} 
 </style>
 ++++
 
@@ -362,7 +368,7 @@ image::./unitflat1.svg[align="center"]
 まあ、見たとおり、対称性があって単純で美しい構造だと思うのですが、これは何気に奥深くて、まるで論理クイズみたいな様相を呈します。
 
 
-この界隈では、「コンテナに入れる」「箱に入れる」「箱から出す」「一枚皮を剥く」「カラに入れる」「カラから出す」はたまた「純粋にする」とか「リフト（アップ）」するとかいろんな言い草がありますが、ここでは単純に「階層」の上下関係で上げる、下げると言いましょう。
+この界隈では、「コンテナに入れる」「箱に入れる」「箱から出す」「ラップする」「一枚皮を剥く」「カラに入れる」「カラから出す」はたまた「純粋にする」とか「リフト（アップ）」するとかいろんな言い草がありますが、ここでは単純に「階層」の上下関係で上げる、下げると言いましょう。
 
 ここでの絶対的ルールは以下の2つだけです。
 
@@ -409,14 +415,13 @@ console.log(
 
 `flat` しても、基底はある！しれっと条件分岐でそこはしっかり保証！されたところで、あとは、`unit` と `flat` の上下移動の数学的対称性をもって、どの階層にも自由に移動できます。
 
-誤解しがちなのですが、エコが破綻する裸の値はまずいですが、ネストした構造が別に悪いわけではありません。むしろネストした構造を扱いたいケースは多いでしょう。
+image::./unitflat5.svg[align="center"]
 
-`flat` は、あくまで裸の値にならない限り、１階層だけ下げる、という仕様でした。無闇やたらに再帰的に平坦化してしまって、構造をぶちこわす、情報を損なう仕組みではありません。
-
-たとえば、２重の `Array` としてコントロールしておくこともできます。
+誤解しがちなのですが、エコが破綻する裸の値はまずいですが、ネストした構造が別に悪いわけではありません。ネストした `Array` を扱いたいのならば、そのネスト構造を維持しながらコントロールすることもできます。
 
 
-image::./unitflat2.svg[align="center"]
+
+
 
 ここはわかりにくいかもしれないので、次に説明します。いずれにせよ、`flat` が追加されたおかげで、階層の上下の数学的対象性が得られてArray構造を自由にコントロールできるようになります。どうやって自由にコントロールするか？というのは、モナドの使い方の話になってきます。
 
@@ -432,16 +437,429 @@ image::./unitflat2.svg[align="center"]
 
 念の為に読者へ保証しておきますが、これは、圏論でちゃんと定義づけされているモナド(Monad)のことです。プログラミングのモナドで定義が異なる、という例のトリッキーなアレではありません。
 
+[NOTE]
+====
 一応裏を取ってみせる必要はあると思うので、とりあえず、英語版Wikipediaの
 https://en.wikipedia.org/wiki/Monad_(category_theory)[Monad (category theory)]と、Wikipediaは信頼性がちょっと・・・と言う人も必ずいるので、Web上の圏論の情報では一番豊富で信頼性が高いと思われるnLabを参照します。
 
+どうせnLabと重複するので、英語版Wikipediaは冒頭だけ。
+
+.Monad (category theory)
+ 
+https://en.wikipedia.org/wiki/Monad_(category_theory)
+
+> In category theory, a branch of mathematics, a monad is an endofunctor (a functor mapping a category to itself), together with two natural transformations.  
+
+---
+
+圏論(category theory)では、モナド(monad)とは、endofunctor(カテゴリを自身に転写するfunctor)で、2つの自然変換(natural transformations)を伴っている。
+
+---
+
+endofunctor(カテゴリを自身に転写( `.map` )するfunctor)のことは良いでしょう。それが伴っている、2つの自然変換(natural transformations)というのは、`unit` と `flat` のことです。
+
+
+ 
+.monad#definition
+
+
+https://ncatlab.org/nlab/show/monad#definition
+
+Monads
+
+A monad in a bicategory K is given by
+
+* an object, together with
+
+* an endomorphism t:a→a, and
+
+*  2-cells η:1a→t (the unit of t) and μ:t∘t→t (the multiplication)
+
+---
+
+A monad in a bicategory K というのは、とりあえず置いときましょう。難しいことではまったくないので後でじっくり説明します。
+
+* an object, together with
+
+今のケースで言えば `Array` オブジェクト + 
+(以下の表記では `t` と対応している)、 それが以下の性質を伴う 
+
+* an endomorphism `t` :a→a, and
+
+endomorphism  - オブジェクト `t` 自身 を返すメソッド `.map` がある
+
+*  2-cells η:1a→ `t` (the `unit` of `t` ) and μ: `t` ∘ `t` → `t`  (the multiplication)
+
+2つのcells(=morphism)がある、 
+
+stem:[η:] 1a→ `t` + 
+一つ階層を上げて `t` を返す `unit` のこと
+
+stem:[μ:] `t` ∘ `t` → `t` + 
+`t` が二重にネストしてたら 一つ階層を下げて `t` にして返す `flat` のこと
+
+`flat` は、stem:[TTX \rightarrow TX] などと表記されることが多いので、ああ `flat` のことを言ってるんだなあ、と思っておけばいいです。stem:[TX \rightarrow X] ではない理由は、`flat` の仕様で、例の、stem:[T] （endofunctorオブジェクト）のエコからはみ出てTypeErrorを食らうという裸の値:Xが出ないように基底が決まっている、条件分岐のことを言っているからです。
+
+
+
+====
+
+圏論のモナド（monad）の定義をまとめると
+
+1. ベースとして、オブジェクト自身を返す `.map` メソッドを持つendofunctorとしての特性をもつオブジェクトで、さらに以下の２つの関数（メソッド）が付いてる
+2. `unit`
+3. `flat`
+
+さらにまとめて、
+
+[stem] 
+++++ 
+(endofunctor, unit, flat)
+++++
+
+
+の３つ組（トリプル）のことをモナドと呼びます。
+
+この辺の組のこと、オブジェクトのことはまだモヤっとしているかもしれないので、bicategoryって何のこと？と合わせて、後でやります。
+
+
+== リストモナド(List Monad)のつかいかた
+
+モナドの超基本的概念とそれに伴う定義付けは終わったので、あとはそれをどう使うか？です。
+
+`Arrray.map` に `Array.flat` 追加してモナドになった `Array` は、特に **リストモナド(List Monad)**と呼ばれます。
+
+復習しておくと、そもそも、わざわざArrayをモナドにした動機とは、endofunctorだけだと、
+
+> もうにっちもさっちもいかないので、ここが `Array.map` の関数型プログラミングでの限界です。`Array.map` は、自分自身＝ `Array` を返すというEndofunctor(自己関手)の特性があり、メソッドチェーンが出来るのだが、**メソッドチェーンが入れ子構造になると、自身の構造をコントロールできなくなる** のです。
+
+という、限界突破の目的でした。構造をコントロールできるようになりたい。
+
+あと、メソッドチェーンを入れ子構造になっても統一的に扱いたいという話の流れで、仮に構造コントロールできるようになったとして、そのトレードオフとして別のなにかが出来なくなると、同じ局面でendofunctorとモナドの使い分けが必要ということになってしまいます。こうなるとまた収集がつかなくなるのは目に見えているので、トレードオフは受け入れられません。
+
+**モナドは、endofunctorの完全な上位互換であってくれないと使い物にはならない、ということです。上位互換を目指します。**
+
+endofunctorとの互換性を担保するだけならば、理屈は簡単で、 `unit` と `flat` が対称なので、行って来いで、効果を相殺すれば済むことです。その上、`flat` はモナドオブジェクト自身の基底にヒットすると、それ以上階層を下げて裸の値を返すことはない安心保証の性質があるので、それだけでも上位互換となるはずです。
+
+
+image::./unitflat5.svg[align="center"]
+
+
+実際にこの理論で上手く行くのか？やってみなきゃわからない。やってみよう。
+
+まず、たたき台となる、普通の `.map` だけのパターン
+[source,js]
+.Array.map
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 = array1
+    .map(a => a * 2);
+
+console.log(array2);
+----
+
+[source,js]
+.Console
+----
+[ 2, 4, 6, 8, 10 ]
+----
+
+想定どおりの挙動です。上位互換のモナドでも、まったく同じことを出来なければいけません。
+
+[source,js]
+.Array.map　+ flat
+----
+const unit = Array.of;
+
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 = array1
+    .map(a => unit(a * 2)) <1>
+    .flat();   <2>
+
+console.log(array2);
+----
+
+<1> `a => a * 2` の代わりに、`a => unit(a * 2)` 
+
+<2> `flat` で相殺
+
+[source,js]
+.Console
+----
+[ 2, 4, 6, 8, 10 ]
+----
+
+できました。想定した挙動になっています。
+
+さて、重要なポイントとして、`unit` と　`flat` で相殺するには単純に考えると複数のパターンが考えられるはずですが、順番として、なぜ、 `unit` ⇒　`flat` となっているのでしょうか？
+
+理由:
+
+1. 最後に `flat` することで、裸の値でないモナドオブジェクトを返すことを保証できる
+
+
+2. あらじめ `unit` で構造を自由に指定した上で、`flat` できる
+
+
+1,2により、相殺して互換性を保つ以上の上位機能が得られます。
+1についてはこれ以上説明は不要でしょうが、２については今から説明してきます。
+
+[TIP]
+.unit(a) = [a]
+====
+
+`unit(a)`
+
+`Array.of(a)`
+
+`[a]`
+
+全部同じ意味ですが、あきらかに可読性と構造の直感的把握がしやすいのは、 `[a]` です。
+
+特にネストした構造になると、
+
+`[ [a] ]` は、 `unit(unit(a))` など煩雑になります。
+
+すでに、`unit` と　`flat` の対称性のことは理解出来たと思うので、、今後特に必要のない限り、`unit(a)` のことは、単純に　`[a]` と表記することにします。
+
+====
 
 
 
 
+メソッドチェーンではどうでしょうか？
+
+まず、たたき台となる、普通の `.map` だけのパターン
+[source,js]
+.Array.map chain
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 = array1
+    .map(a => a * 2)
+    .map(a => a + 1);
+
+console.log(array2);
+----
+
+[source,js]
+.Console
+----
+[ 3, 5, 7, 9, 11 ]
+----
+
+想定どおりの挙動です。上位互換のモナドでも、まったく同じことを出来なければいけません。
+
+[source,js]
+.Array.map　+ flat chain
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 = array1
+    .map(a => [a * 2]).flat()
+    .map(a => [a + 1]).flat();
+
+console.log(array2);
+----
+
+[source,js]
+.Console
+----
+[ 3, 5, 7, 9, 11 ]
+----
+
+問題なく出来ました。
+
+== リストモナドでリスト構造をコントロールする
+
+[source,js]
+.要素の数を増やす
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 = array1
+    .map(a => [a, a])　<1>
+    .flat(); <2>
+
+console.log(array2);
+
+----
+
+<1> `a => [a, a]` 返り値としてリスト構造を規定する
+
+<2> `[ [ 1, 1 ], [ 2, 2 ], [ 3, 3 ], [ 4, 4 ], [ 5, 5 ] ]` を `flat` 
+
+[source,js]
+.Console
+----
+[ 1, 1, 2, 2, 3, 3, 4, 4, 5, 5 ]
+----
+
+[source,js]
+.要素の数を増やしたいわけじゃない、`[ [ 1, 1 ], [ 2, 2 ], [ 3, 3 ], [ 4, 4 ], [ 5, 5 ] ]` という構造が欲しいので .mapと同じ結果を寄越せ
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 = array1
+    .map(a => [[a, a]])　<1>
+    .flat(); <2>
+
+console.log(array2);
+----
+
+<1> `a => [ [a, a] ]` 返り値としてリスト構造を規定する
+
+<2> `[ [ [ 1, 1 ] ],
+[ [ 2, 2 ] ],
+  [ [ 3, 3 ] ],
+  [ [ 4, 4 ] ],
+  [ [ 5, 5 ] ] ]` を `flat` 
+
+[source,js]
+.Console
+----
+[ [ 1, 1 ], [ 2, 2 ], [ 3, 3 ], [ 4, 4 ], [ 5, 5 ] ]
+----
+
+
+
+[source,js]
+.要素の数を減らす　奇数のみピックアップ
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 = array1
+    .map(a =>
+        a % 2 === 1 <1>
+            ? [a]  <2>
+            : []   <3>
+    ).flat();      <4>
+
+console.log(array2);
+----
+
+<1> 配列要素 `a` を `2` で割って余りが `1` なら奇数
+<2> 奇数なら、そのままの構造 `[a]` で返す
+<3> 奇数でなかったら、構造を削除したいので、`[]` を返す
+<4> `[ [1], [], [3], [], [5] ]` を `flat` して　`[ 1, 3, 5 ]`
+
+[source,js]
+.Console
+----
+[ 1, 3, 5 ]
+----
+
+
+
+== Array.flatMapの登場
+
+`.map(f).flat()` のモナドメソッドはendofunctorの上位互換として機能することが確認出来ました。もうこの確定したパターンでは、逐一尻尾に `.flat()` 着けて回るのはスマートではないしバグの温床にもなりかねません。
+
+そこで、もうこの２つの関数を合成してしまって、ひとつの関数として使い回せたほうが便利ですね。それが関数型プログラミングです。
+
+もちろん合成された関数が `Array` のメソッドとして実装されていないとまた自前でプロトタイプ拡張とかする羽目になって面倒ですが・・・
+
+ということで、あります。
+
+https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap[Array.flatMap]
+
+> flatMap() メソッドは、最初にマッピング関数を使用してそれぞれの要素をマップした後、結果を新しい配列内にフラット化します。これは深さ 1 の flatten が続く map と同じですが、flatMap はしばしば有用であり、2 つのメソッドを 1 つにマージするよりもやや効果的です。
+
+`Array.flatMap` は 最終的に `Array.flat` する `Array.map` という合成関数です。
+
+`Array.flatMap` はもちろんモナドのメソッドです。 
+
+`Array` 以外のモナドで、既存のものにせよ、自前で何か実装するにせよ、endofunctor の `map` に `flat` 合成するというパターンはもう決まりきっているので、多くのモナドの実装では、`flat` は独立した関数として分離しておらず、`flat` は、オブジェクト構造の平坦化　stem:[TTX \rightarrow TX] という機能として、  `flatMap` メソッド(概念として。名前は自由。)のコードに組み入れられて渾然一体となっているケースが多いと思います。
 
 
 
 
+image::./flat-browser.png[]
+
+よく見ると、`Array.flat` の実装状況と同じで、`Array.flat` と　`Array.flatMap`　はふたつセット各ブラウザへ実装されたっぽいことが推察されます。
+
+Array.map+ flat chain　のコードは `Array.flatMap` を使って書き換えられます。
+
+[source,js]
+.Array.flatMap chain
+----
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 = array1
+    .flatMap(a => [a * 2])
+    .flatMap(a => [a + 1]);
+
+console.log(array2);
+----
+
+[source,js]
+.Console
+----
+[ 3, 5, 7, 9, 11 ]
+----
 
 
+では、懸案だったメソッドチェーンのネスト構造でも、この `Array.flatMap` メソッド一つで統一的に書けるようになっているのか？
+
+[source,js]
+.Array.flatMap chain
+----
+const f = array =>
+    array
+        .flatMap(a => [a * 2])
+        .flatMap(a => [a + 1]);
+
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 =
+    [array1].flatMap(f);
+
+console.log(array2);
+----
+
+[source,js]
+.Console
+----
+[ 3, 5, 7, 9, 11 ]
+----
+
+余裕です。
+
+さらに、
+
+[source,js]
+.Array.flatMap chain2
+----
+const f = array =>
+    array
+        .flatMap(a => a * 2)   <1>
+        .flatMap(a => a + 1);  <2>
+
+const array1 = [1, 2, 3, 4, 5];
+
+const array2 =
+    [array1].flatMap(f);
+
+console.log(array2);
+----
+
+<1> 非モナドの　`Array.map` のときと同じ関数
+<2> 非モナドの　`Array.map` のときと同じ関数
+
+でも同様にうまく動作してしまいます。
+
+[source,js]
+.Console
+----
+[ 3, 5, 7, 9, 11 ]
+----
+
+何故か？
+
+そもそも、 `flat` の仕様は、モナドがネストしていない基底のオブジェクトだったら、そのままのオブジェクトを返す、つまり `map` の結果を変化させないというものでした。
+
+上の場合、メソッドチェーンのネスト構造は `flat` して整合性を保ち、なおかつ、ネストしてない部分では、返り値に、`unit` で構造づけしなくても、動作したということです。
+
+これは、特にネスト構造を積極的には取り扱うシナリオではなく、単にメソッドチェーンの合成だけ積極的にやりたい、という場合は有用でしょう。

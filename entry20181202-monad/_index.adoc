@@ -15,6 +15,7 @@ Ken Okabe <kentutorialbook@gmail.com>
 ++++
 <style type="text/css">
 p >code {background-color: #aaaaaa};　
+td >code {background-color: #aaaaaa};
 </style>
 ++++
 
