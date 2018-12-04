@@ -1,21 +1,21 @@
 
 
-const f = array =>
-    [array]
-        .flatMap(a => a * 2)
-        .flatMap(a => a + 1);
-
-const array1 = [1, 2, 3, 4, 5];
-
-const array2 = array1.flatMap(f);
-
-console.log(array2);
 
 
+const array1 =
+    [1, 2]
+        .concat([3])
+        .concat([4, 5]);
+
+console.log(array1);
 
 
+const array1 =
+    [1, 2].concat(
+        [3].concat([4, 5])
+    );
 
-
+console.log(array1);
 
 /*
 
