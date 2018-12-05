@@ -28,7 +28,7 @@ td>code {background-color: #aaaaaa};
 
 [stem]
 ++++
-(Array,concat,[\space]) 
+(Array,[\space],concat) 
 ++++
 
 は、
@@ -168,7 +168,7 @@ Arrayモナドのメソッドである `Array.flatMap` は
 `Array.concat` を二項演算とするArrayモノイド（３つ組）
 [stem]
 ++++
-(Array,concat,[\space]) 
+(Array,[\space],concat) 
 ++++
 
 のように、モノイドの観点から捉えられないか？
@@ -179,12 +179,13 @@ Arrayモナドのメソッドである `Array.flatMap` は
 ++++
 [stem]
 ++++
-flatMap,
+flatMapの左右単位元, 
 ++++
 [stem]
 ++++
-flatMapの左右単位元) 
+flatMap)
 ++++
+
 
 とならないか？
 
@@ -224,7 +225,7 @@ Arrayモノイドの `Array.concat` メソッドで確認したことは以下�
 
 [stem]
 ++++
-(Array,concat,[\space]) 
+(Array,[\space],concat) 
 ++++
 ====
 
@@ -232,7 +233,7 @@ Arrayモノイドの `Array.concat` メソッドで確認したことは以下�
 
 [stem]
 ++++
-(Array,flatMap,unit) 
+(Array,unit,flatMap) 
 ++++
 
 だと証明するためには、これをリバースエンジニアリングしていければいいでしょう。多分。
@@ -383,19 +384,19 @@ fg = a \Rightarrow a * f * g
 ----
 {
  const array1 =
-  [1, 2, 3]
-   .flatMap(a => [a * 2])
-   .flatMap(a => [a + 1])
+  [1, 2, 3]    <1>
+   .flatMap(a => [a * 2])  <1>
+   .flatMap(a => [a + 1]); <1>
 
  console.log(array1);
 }
 {
  const array1 =
-  [1, 2, 3]
-   .flatMap(a =>
-    [a]
-     .flatMap(a => [a * 2])
-     .flatMap(a => [a + 1])
+  [1, 2, 3]       <2>
+   .flatMap(      <2>
+    a => [a]                <3>
+     .flatMap(a => [a * 2]) <3>
+     .flatMap(a => [a + 1]) <3>
    );
 
  console.log(array1);
@@ -403,10 +404,11 @@ fg = a \Rightarrow a * f * g
 
 ----
 
-<1> aの各要素を適当にモナドへマップする関数
-<2> stem:[unit(a)*f]  　　左単位元
-<3> stem:[f(a)]
-<4> stem:[f(a)*unit]  　　右単位元
+<1> stem:[a * f * g]
+<2> stem:[a * fg]
+<3> stem:[a \Rightarrow a * f * g] 　モナド合成関数 `fg`
+
+
 
 [source,js]
 .Console
@@ -415,9 +417,103 @@ fg = a \Rightarrow a * f * g
 [ 3, 5, 7 ]
 ----
 
+というか、実はこれ <<ch_04.adoc#.モナド(Monad)>>で、そもそもこういうメソッドチェーンの合成関数の切り出しへの、メソッドチェーンの再接続、ネスト化ってのができないと、関数型プログラミングでは大問題だ！という強い動機をもって、モナド導入した、という本稿の流れだったので、すでに検証は終わってた話なんですね。
+
+それは言い換えると、モノイドにもある結合法則のお話だったと。
+
+== クライスリトリプル
+
+このように、
+
+> https://stackoverflow.com/questions/3870088/a-monad-is-just-a-monoid-in-the-category-of-endofunctors-whats-the-problem[
+A monad is just a monoid in the category of endofunctors, what's the problem?]
+
+**「モナドっていうのは、ただ単に、自己関手(endofunctor)の圏の中にあるモノイドのことなんだよ、なにか問題でも？」**
+などと時折言われるわけですが、モナドをモノイドとして捉え、オブジェクト、二項演算、左右単位元の３つ組（トリプル）にしたもの
+
+[stem]
+++++
+(endofunctor,unit,flatMap) 
+++++
+
+を、link:https://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%AA%E5%9C%8F#%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%AA%E3%83%88%E3%83%AA%E3%83%97%E3%83%AB%EF%BC%88Kleisli_triple%EF%BC%89[クライスリトリプル]と呼びます。
+
+
+[TIP]
+.比較しよう　ふたつのトリプル
+====
+圏論のモナド（monad）の定義をまとめると
+
+1. ベースとして、オブジェクト自身を返す `.map` メソッドを持つendofunctorとしての特性をもつオブジェクトで、さらに以下の２つの関数（メソッド）が付いてる
+2. `unit`
+3. `flat`
+
+さらにまとめて、
+
+[stem] 
+++++ 
+(endofunctor, unit, flat)
+++++
+
+の３つ組（トリプル）のことをモナドと呼びます。
+
+この辺の組のこと、オブジェクトのことはまだモヤっとしているかもしれないので、bicategoryって何のこと？と合わせて、後でやります。
+
+====
 
 
 
+== モナド則(Monad Laws)
+そこをさらに推し進め、モノイドの用語をまるまる踏襲した上で天下り的に法則として列挙したのがモナド則(Monad Laws)です。
+
+すでに書いていますが、再掲すると、
+
+=== 左右の単位元
+
+[stem]
+++++
+unit(a)*f = f(a) = f(a)*unit
+++++
+
+=== 結合法則
+
+[stem]
+++++
+(a * f) * g = a * f * g = a * (a \Rightarrow a * f * g)
+++++
+
+ですね。
+
+[WARNING]
+.モナド則解読不能版
+====
+
+モナド則は、さらに天下り的に解読不能にするために、左単位元と右単位元にバラされた上で、右単位元の `f(a)` は 「どうせモナド値なのだから」と、`m` として簡約され、方程式の左右を入れ替えられたり、いろいろした結果、
+
+- 左単位元(LEFT IDENTITY)　　stem:[unit(a)*f = f(a)]
+
+- 右単位元(RIGHT IDENTITY)　stem:[m*unit = m]
+
+- 結合法則(ASSOCIATIVITY)　 stem:[(m * f) * g = m * (x \Rightarrow x * f * g)]
+
+という感じでエンドユーザに提供されることが多いようです。
+
+とりあえず、モノイドのことを知らない人、知っててもモナドとの関連がわからない人には、特に上のように変形された対称性がわかりにくい左右の単位元とか解読不能でしょう。
+
+あとHaskell特有の二項演算子の記号と、Syntaxで表記されることが多いので、HaskellのSyntaxがわからない人にとっては、もうお手上げでしょう。
+
+====
+
+モナドの二項演算 `*` を　`Array.flatMap` メソッドとして具体化して書き直すと、
 
 
 
+[source,js]
+.Array Monad 左右単位元
+----
+const left = unit(a).flatMap(f);    
+const center = f(a);                
+const right = f(a).flatMap(unit);  
+----
+
+となりますが、これは `Array.flatMap` に限った構造ではなく、他のモナド実装でも同じ様相になります。もちろん、`unit` `flatMap` などの名前は実装者の好み、さじ加減１つなので、ケースバイケースです。
