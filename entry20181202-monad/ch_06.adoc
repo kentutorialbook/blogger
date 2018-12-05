@@ -1,7 +1,7 @@
 
 = モノイド
 ifndef::stem[:stem: latexmath]
-ifndef::imagesdir[:imagesdir: ../img/]
+ifndef::imagesdir[:imagesdir: ./img/]
 ifndef::source-highlighter[:source-highlighter: highlightjs]
 
 ifndef::highlightjs-theme:[:highlightjs-theme: solarized-dark]
@@ -412,6 +412,10 @@ console.log(array1);
 と結合順序を変えても結果は変わりません。
 
 
+== まとめ
+
+モノイドは関数型プログラミングで役立つし、理解しておくのは重要。この章はただの紹介にすぎず、もっと充実すべく加筆が必要。
+
 [TIP]
 .Array.flatMapと似ている？
 ====
@@ -421,12 +425,6 @@ console.log(array1);
 次の章ではそこを追求してスッキリさせましょう。
 
 ====
-
-
-
-
-
-
 
 
 

@@ -1,7 +1,7 @@
 
 = モノイドとモナドの関係
 ifndef::stem[:stem: latexmath]
-ifndef::imagesdir[:imagesdir: ../img/]
+ifndef::imagesdir[:imagesdir: ./img/]
 ifndef::source-highlighter[:source-highlighter: highlightjs]
 
 ifndef::highlightjs-theme:[:highlightjs-theme: solarized-dark]
@@ -70,7 +70,7 @@ a_{1} * a_{2} *  ...
 
 [stem]
 ++++
-3 + 5 = 8
+1 + 2 = 3
 ++++
 [stem]
 ++++
@@ -252,7 +252,12 @@ unit*[1,2] = [1,2] = [1,2]*unit
 1. `Array` の値 `a`
 2. モナド関数 `f`
 
-と二つの異なるタイプの間の二項演算で、右辺はこのタイプで合致しますが、左辺は、最初に `Array` の値 `a` が入るべきところ、`unit` 関数になっているのでタイプが合いません。
+と二つの異なるタイプの間の二項演算
+[stem]
+++++
+a_{1} * f = a_{2}
+++++
+で、右辺はこのタイプで合致しますが、左辺は、最初に `Array` の値 `a` が入るべきところ、`unit` 関数になっているのでタイプが合いません。
 
 逆に、モナド関数 `f` を使っても
 
@@ -263,12 +268,6 @@ unit*f = f = f*unit
 
 同じ理由で左右タイプエラーになります。
 
-`Array.flatMap` = `*` は、
-
-[stem]
-++++
-a * f = a
-++++
 
 なので、すべての項において、この二項演算に合うようにパラメータと返り値のタイプを合わせます。
 
@@ -421,14 +420,14 @@ fg = a \Rightarrow a * f * g
 
 それは言い換えると、モノイドにもある結合法則のお話だったと。
 
-== クライスリトリプル
+== クライスリトリプル（Kleisli triple）
 
 このように、
 
 > https://stackoverflow.com/questions/3870088/a-monad-is-just-a-monoid-in-the-category-of-endofunctors-whats-the-problem[
 A monad is just a monoid in the category of endofunctors, what's the problem?]
 
-**「モナドっていうのは、ただ単に、自己関手(endofunctor)の圏の中にあるモノイドのことなんだよ、なにか問題でも？」**
+**「モナドっていうのは、ただ単に、自己関手(endofunctor)の圏の中におけるモノイドのことなんだよ、なにか問題でも？」**
 などと時折言われるわけですが、モナドをモノイドとして捉え、オブジェクト、二項演算、左右単位元の３つ組（トリプル）にしたもの
 
 [stem]
@@ -436,35 +435,35 @@ A monad is just a monoid in the category of endofunctors, what's the problem?]
 (endofunctor,unit,flatMap) 
 ++++
 
-を、link:https://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%AA%E5%9C%8F#%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%AA%E3%83%88%E3%83%AA%E3%83%97%E3%83%AB%EF%BC%88Kleisli_triple%EF%BC%89[クライスリトリプル]と呼びます。
+を、link:https://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%AA%E5%9C%8F#%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%AA%E3%83%88%E3%83%AA%E3%83%97%E3%83%AB%EF%BC%88Kleisli_triple%EF%BC%89[クライスリトリプル（Kleisli triple）]と呼びます。
 
 
 [TIP]
-.比較しよう　ふたつのトリプル
+.比較してみよう　ふたつのトリプル
 ====
-圏論のモナド（monad）の定義をまとめると
-
-1. ベースとして、オブジェクト自身を返す `.map` メソッドを持つendofunctorとしての特性をもつオブジェクトで、さらに以下の２つの関数（メソッド）が付いてる
-2. `unit`
-3. `flat`
-
-さらにまとめて、
+圏論で一般的に定義されるモナド（monad）/トリプル
 
 [stem] 
 ++++ 
 (endofunctor, unit, flat)
 ++++
 
-の３つ組（トリプル）のことをモナドと呼びます。
+クライスリトリプル（Kleisli triple）
+[stem]
+++++
+(endofunctor,unit,flatMap) 
+++++
 
-この辺の組のこと、オブジェクトのことはまだモヤっとしているかもしれないので、bicategoryって何のこと？と合わせて、後でやります。
+筆者の感想。
+
+`.map` と `.flat` 合成して `.flatMap` と単独の二項演算子としたことで、モノイドのパースペクティブが得られたのは良かったし、両トリプルの表記もよく整合している。
 
 ====
 
 
 
 == モナド則(Monad Laws)
-そこをさらに推し進め、モノイドの用語をまるまる踏襲した上で天下り的に法則として列挙したのがモナド則(Monad Laws)です。
+さらに推し進め、モノイドの用語をまるまる踏襲した上で法則として列挙したのがモナド則(Monad Laws)です。
 
 すでに書いていますが、再掲すると、
 
@@ -488,7 +487,7 @@ unit(a)*f = f(a) = f(a)*unit
 .モナド則解読不能版
 ====
 
-モナド則は、さらに天下り的に解読不能にするために、左単位元と右単位元にバラされた上で、右単位元の `f(a)` は 「どうせモナド値なのだから」と、`m` として簡約され、方程式の左右を入れ替えられたり、いろいろした結果、
+モナド則は、さらに天下り的に解読不能にするために、左単位元と右単位元にバラされた上で、右単位元の `f(a)` は 「どうせモナド値なのだから」と実用上の利点はあるにせよ、特に断りもなく単に `m` として簡約され、方程式の左右を入れ替えられたり、いろいろした結果、
 
 - 左単位元(LEFT IDENTITY)　　stem:[unit(a)*f = f(a)]
 
@@ -498,9 +497,9 @@ unit(a)*f = f(a) = f(a)*unit
 
 という感じでエンドユーザに提供されることが多いようです。
 
-とりあえず、モノイドのことを知らない人、知っててもモナドとの関連がわからない人には、特に上のように変形された対称性がわかりにくい左右の単位元とか解読不能でしょう。
+とりあえず、モノイドのことを知らない人、知っててもモナドとの関連がわからない人には、特に上のように変形されて対称性がわかりにくい左右の単位元とか解読不能でしょう。
 
-あとHaskell特有の二項演算子の記号と、Syntaxで表記されることが多いので、HaskellのSyntaxがわからない人にとっては、もうお手上げでしょう。
+あとHaskell特有の二項演算子の記号と、Syntaxで表記されることが多いので、HaskellのSyntaxがわからない人はお手上げです。
 
 ====
 
@@ -517,3 +516,7 @@ const right = f(a).flatMap(unit);
 ----
 
 となりますが、これは `Array.flatMap` に限った構造ではなく、他のモナド実装でも同じ様相になります。もちろん、`unit` `flatMap` などの名前は実装者の好み、さじ加減１つなので、ケースバイケースです。
+
+== まとめ
+
+モナドを知るときは、同時にモノイドのことも知っておこう。
