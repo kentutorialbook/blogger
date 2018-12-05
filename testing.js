@@ -1,21 +1,48 @@
 
+const unit = a => [a];
 
+const a = [1, 2];
+const f = a =>
+ a.flatMap(a => [a * 10, a * 100]);
 
+const left = unit(a).flatMap(f);
+const center = f(a);
+const right = f(a).flatMap(unit);
 
-const array1 =
-    [1, 2]
-        .concat([3])
-        .concat([4, 5]);
+console.log(left);
+console.log(center);
+console.log(right);
 
-console.log(array1);
+{
+ const f = array =>
+  [array]
+   .flatMap(a => [a * 2])
+   .flatMap(a => [a + 1]);
 
+ const array1 = [1, 2, 3, 4, 5].flatMap(f);
 
-const array1 =
-    [1, 2].concat(
-        [3].concat([4, 5])
-    );
+ console.log(array1);
+}
+{
+ const array1 =
+  [1, 2, 3]
+   .flatMap(a => [a * 2])
+   .flatMap(a => [a + 1])
 
-console.log(array1);
+ console.log(array1);
+}
+{
+ const array1 =
+  [1, 2, 3]
+   .flatMap(a =>
+    [a]
+     .flatMap(a => [a * 2])
+     .flatMap(a => [a + 1])
+   );
+
+ console.log(array1);
+}
+
 
 /*
 
