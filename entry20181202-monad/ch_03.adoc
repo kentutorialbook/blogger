@@ -1,9 +1,23 @@
 
-= なぜモナドか
+= なぜモナドか?
 ifndef::stem[:stem: latexmath]
 ifndef::imagesdir[:imagesdir: ./img/]
+ifndef::source-highlighter[:source-highlighter: highlightjs]
+ifndef::highlightjs-theme:[:highlightjs-theme: solarized-dark]
 
-JavaScript上で実用的だから。
+++++
+<style type="text/css">
+p>code {background-color: #aaaaaa};
+
+th,td {
+    border: solid 1px;  
+}　
+td>code {background-color: #aaaaaa};
+} 
+</style>
+++++
+
+JavaScript上でかなり実用的だから。
 
 上述のとおり、モナドとは関数型プログラミングの一部です。
 
@@ -12,7 +26,7 @@ JavaScript上で実用的だから。
 - 値
 - 値でもある関数
 
-の組み合わせ（function composition）で制御します。（この２つの組み合わせについては後でかなり詳しく説明します。）
+の組み合わせ（function composition）で制御します。（この２つの組み合わせについては後で詳しく説明します。）
 
 == jQuery
 
@@ -32,7 +46,7 @@ $("#p1")
     .slideDown(2000);
 ----
 
-と、link:https://www.w3schools.com/jquery/jquery_chaining.asp[メソッドチェーンをもって書き連ねる]だけで、link:https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_chaining2[Demo:こんなこと]ができるようになるとか、衝撃的ですらあります。要するに、この _"write less, do more"_ こそが、関数型プログラミングの真価であり、jQueryはただひとつの、 `$()` というjQueryオブジェクト生成関数と、それにぶら下がる巨大なメソッド群から成立していて使い方はシンプルです。
+と、link:https://www.w3schools.com/jquery/jquery_chaining.asp[メソッドチェーンをもって書き連ねる]だけで、link:https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_chaining2[Demo:こんなこと]ができるようになるとか、当時JavaScriptコミュニティに衝撃を与えました。要するに、この _"write less, do more"_ こそが、関数型プログラミングの真価であり、jQueryはただひとつの、 `$()` というjQueryオブジェクト生成関数と、それにぶら下がる巨大なメソッド群から成立していて使い方自体はシンプルです。
 
 jQueryは値(オブジェクト)＆関数（オブジェクトにぶらさがるメソッド群）のペアです。
 
@@ -44,7 +58,7 @@ jQueryがモナドかどうか？というのはしばしば議論にあがる�
 
 == MonadicReact
 
-jQueryは標準DOMのAPIがかなりマシになってきたこととでパフォーマンスの観点からも、jQuery非依存で書くというトレンドが見られます。さらに仮想DOMのコンポーネントでやるReactが登場したことにより、世代交代が起こった感もあります。
+jQueryは標準DOMのAPIがかなりマシになってきたこととでパフォーマンスの観点からも、jQuery非依存で書こうというトレンドが見られます。さらに仮想DOMのコンポーネント機構をもつReactが登場したことにより、世代交代が起こった感もあります。
 
 Reactをより関数型プログラミングで、という目的でいろんなライブラリがありますが、
 
@@ -52,14 +66,14 @@ https://github.com/hoppinger/MonadicReact
 
 https://www.npmjs.com/package/monadic_react
 
-Medium記事：link:https://medium.com/@giuseppemaggiore/type-safe-monads-and-react-499b4a2f56d7[Type-safe monads and React]
+みたいなReactのモナドラッパーがあります。
 
-みたいなReactのモナドラッパーがあるようだ、「便利でパワフルだ」みたいなことがエンドユーザ向けに書かれているが、とりあえず何が書かれているのか理解できないので、理解したい、となるでしょう。
-
+Ph.Dを持つ作者が、Medium記事：link:https://medium.com/@giuseppemaggiore/type-safe-monads-and-react-499b4a2f56d7[Type-safe monads and React]で
+__Yet another introduction to monads__とモナドの紹介をしながら「便利でパワフルだ」みたいなことをエンドユーザに向けて書いてますが、とりあえず何が書かれているのかさっぱり理解できない！という人は、でもやっぱり理解したい、となるでしょう。
 
 == Promise
 
-ES6+ 以降で導入された https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises[Promise]も一部モナドっぽいふるまいをします。厳密にはモナドではありません。PromiseはjQueryほど巨大なAPIではないので、すべて厳密にモナドであったほうが有用性はあがるはずですが、そうではないので残念です。
+ES6+ 以降で導入された https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Using_promises[Promise]も一部モナドっぽいふるまいをします。モナドだと言う人もいますが、モナドではありません。PromiseはjQueryほど巨大なAPIではないので、すべて厳密にモナドであったほうが有用性はあがるはずですが、そうではないので残念です。
 
 Promiseはすでに、ESModule
 
@@ -88,8 +102,11 @@ Promises(ES6+ Promise含む)のオルタナティブ。
 
 npmのデータでは、それなりのパッケージから依存され、それなりのダウンロード数も誇るようです。
 
-Promisesと違ってモナドインターフェイスになっているよ、と書かれています。
+Promisesと違ってモナドインターフェイス(monadic interface)になっているよ、と書かれています。
 
 何が違うのか、どんなのメリットがあるのか？そもそもモナド理解してないと意味不明ですよね？
 
+== まとめ
+
+今どきのJavaScriptプログラマならば、モナドくらいは知っておいたほうが良さそうだ。
 

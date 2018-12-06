@@ -42,7 +42,7 @@ image::./unitflat5.svg[align="center"]
 
 実際にこの理論で上手く行くのか？やってみなきゃわからない。やってみよう。
 
-まず、たたき台となる、普通の `.map` だけのパターン
+まず、たたき台となる、普通の `Array.map` だけのパターン
 [source,js]
 .Array.map
 ----
@@ -60,7 +60,7 @@ console.log(array2);
 [ 2, 4, 6, 8, 10 ]
 ----
 
-想定どおりの挙動です。上位互換のモナドでも、まったく同じことを出来なければいけません。
+想定どおりの挙動です。上位互換となるモナドでも、まったく同じことが出来なければいけません。
 
 [source,js]
 .Array.map　+ flat
@@ -99,7 +99,7 @@ console.log(array2);
 
 
 1,2により、相殺して互換性を保つ以上の上位機能が得られます。
-1についてはこれ以上説明は不要でしょうが、２については今から説明してきます。
+1についてはこれ以上説明は不要でしょうが、２については今から説明していきます。
 
 [TIP]
 .unit(a) = [a]
@@ -115,7 +115,7 @@ console.log(array2);
 
 `[ [a] ]` は、 `unit(unit(a))` など煩雑になります。
 
-すでに、`unit` と　`flat` の対称性のことは理解出来たと思うので、、今後特に必要のない限り、`unit(a)` のことは、単純に　`[a]` と表記することにします。
+すでに、`unit` と　`flat` の対称性のことは理解出来たと思うので、、特に必要のない限り、`unit(a)` のことは、単純に　`[a]` と表記することにします。
 
 ====
 
@@ -124,7 +124,7 @@ console.log(array2);
 
 メソッドチェーンではどうでしょうか？
 
-まず、たたき台となる、普通の `.map` だけのパターン
+まず、たたき台となる、普通の `Array.map` だけのパターン
 [source,js]
 .Array.map chain
 ----
@@ -143,7 +143,7 @@ console.log(array2);
 [ 3, 5, 7, 9, 11 ]
 ----
 
-想定どおりの挙動です。上位互換のモナドでも、まったく同じことを出来なければいけません。
+想定どおりの挙動です。上位互換となるモナドでも、まったく同じことが出来なければいけません。
 
 [source,js]
 .Array.map　+ flat chain
@@ -248,7 +248,7 @@ console.log(array2);
 
 == Array.flatMapの登場
 
-`.map(f).flat()` のモナドメソッドはendofunctorの上位互換として機能することが確認出来ました。もうこの確定したパターンでは、逐一尻尾に `.flat()` くっつけて回るのは、付け忘れる可能性だってある、スマートではないし、見通しも悪く、バグの温床にもなりかねません。
+`Array.map(f).flat` となるモナドメソッドはendofunctorの上位互換として機能することが確認出来ました。もうこの確定したパターンでは、逐一尻尾に `.flat()` くっつけて回るのは、付け忘れる可能性だってある、スマートではないし、見通しも悪く、バグの温床にもなりかねません。
 
 そこで、もうこの２つの関数を合成してしまって、ひとつの関数として使い回せたほうが便利ですね。それが関数型プログラミングです。
 
@@ -271,7 +271,7 @@ https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Ar
 
 image::./flat-browser.png[]
 
-よく見ると、`Array.flat` の実装状況と同じで、`Array.flat` と　`Array.flatMap`　はふたつセット各ブラウザへ実装されたっぽいことが推察されます。
+よく見ると、`Array.flat` の実装状況と同じで、`Array.flat` と　`Array.flatMap`　はふたつセットで各ブラウザへ実装されたっぽいことが推察されます。
 
 Array.map+ flat chain　のコードは `Array.flatMap` を使って書き換えられます。
 
@@ -471,13 +471,13 @@ console.log(array2);
 - `Array.flatMap`
 - モナド関数
 
-モナドの構成要素となっているこの３つの関数は、3つとも必ずモナドを返す関数であることに注目してください。
+モナドの構成要素となっているこれら３つの関数は、3つとも必ずモナドを返す関数であることに注目してください。
 ====
 
 
 == モナド関数を設計する
 
-モナド関数は、モナド関数を返せばなんでも自由だという事が判明したので、モナド関数を自由に設計してみます。
+モナド関数は、モナドを返せばなんでも自由だという事が判明したので、モナド関数を自由に設計してみます。
 
 まず手始めに、もっとも単純な、何もせずに自分自身を返すモナド関数を作ります。
 
@@ -512,21 +512,17 @@ console.log(array2);
 [source,js]
 .モナド関数　plus9
 ----
-const plus9 = a => <1>
-    unit(a)  <2>
-        .flatMap(n => unit(n + 9)); <3>
+const plus9 = a => unit(a + 9);   <1>
 
 const array1 = [1, 2, 3, 4, 5];
 const array2 = array1
-    .flatMap(plus9); <4>
+    .flatMap(plus9);   <2>
 
 console.log(array2);
 ----
 
-<1> 9を足す `plus9` というモナド関数を作りたい
-<2> ここまで `identity` と一緒　自分自身
-<3> 自分自身に `n => unit(n + 9)` というモナド関数で `flatMap`
-<4> `plus9` モナド関数で `flatMap`
+<1> 9を足すモナド関数 `plus9` `a => unit(a + 9)`
+<2> `plus9` モナド関数で `flatMap`
 
 [source,js]
 .Console
@@ -540,33 +536,42 @@ console.log(array2);
 .モナド関数　oddFilter
 ----
 const oddFilter = a =>  <1>
-    unit(a)        <2>
-        .flatMap(n =>      <3> 
-            n % 2 === 1    <4>
-                ? unit(n)  <5>
-                : []       <6>
-        );
+    a % 2 === 1         <2>
+        ? unit(a)       <3>
+        : [];           <4>
 
 const array1 = [1, 2, 3, 4, 5];
 const array2 = array1
-    .flatMap(oddFilter);  <7>
+    .flatMap(oddFilter);  <5>
 
 console.log(array2);
 ----
 
-<1> 奇数だけピックアップする `oddFilter` というモナド関数を作りたい
-<2> ここまで `identity` と一緒　自分自身
-<3> 要素 `n` が奇数のみフィルターするモナド関数を定義していく
-<4>  `2`　で割って余りが `1` ならば
-<5> 奇数なので、`unit(n)` つまり、要素 `n` 自身 をモナド値として返す
-<6> 奇数でないので、`[]` つまり、要素　`n` を削除
-<7> `oddFilter` モナド関数で `flatMap`
+<1> モナド `a` が奇数ならそのまま返し、奇数でなければ、空のモナド `[]` を返す `oddFilter` というモナド関数
+<2>  `2` で割って余りが `1` ならば
+<3> 奇数なので、`unit(a)` つまり、要素 `a` 自身 をモナド値として返す
+<4> 奇数でないので、`[]` 空のモナド値を返し、要素 `a` を削除
+<5> `oddFilter` モナド関数で `flatMap`
 
 [source,js]
 .Console
 ----
 [ 1, 3, 5 ]
 ----
+
+[TIP]
+.自分自身を削除するモナド関数
+====
+`oddFilter` というモナド関数が面白いのは、「空のモナド `[]` を返すこと」が「自分自身を削除する」という意味になっているところです。
+
+一般的にモナド関数 `a => []` は自分自身を削除するモナド関数で、データをクリアできます。
+
+モナドが自分自身の構造をコントロールできる、という意味が実感できるでしょうか？
+
+普通の `Array.map` の配列操作では、仮にメソッドチェーンのタイプエラー問題を克服しながら関数化できたとしても、このような芸当は不可能です。
+
+
+====
 
 
 ---
@@ -596,21 +601,24 @@ console.log(array3);
 [source,js]
 .モナド関数　メソッドチェーンでモナド関数合成
 ----
-const plus9oddFilter = a =>　　<1>
-    unit(a)
-        .flatMap(plus9)
-        .flatMap(oddFilter);
+const plus9oddFilter = a =>   <1>
+    unit(a)                   <2>
+        .flatMap(plus9)       <3>
+        .flatMap(oddFilter);  <4>
 
 const array1 = [1, 2, 3, 4, 5];
 const array4 = array1
-    .flatMap(plus9oddFilter); <2>
+    .flatMap(plus9oddFilter);  <5>
 
 console.log(array4);
 
 ----
 
 <1> `plus9oddFilter` というモナド合成関数を作る
-<2> `plus9oddFilter`  モナド関数で `flatMap`
+<2> ここまで `identity` モナド関数 と一緒　自分自身を返している
+<3> `plus9` モナド関数で `flatMap`
+<4> `oddFilter` モナド関数で `flatMap`
+<5> `plus9oddFilter`  モナド関数で `flatMap`
 
 [source,js]
 .Console
@@ -622,6 +630,8 @@ console.log(array4);
 == まとめ
 
 モナドは、`map` メソッドに `flat` メソッドを追加したオブジェクト。
+
+`map` と `flat` を合成したのが、`flatMap` で当然これもモナドのメソッド。
 
 JavaScriptの `Array.flatMap` でリストモナドに触れるので慣れよう。
 
