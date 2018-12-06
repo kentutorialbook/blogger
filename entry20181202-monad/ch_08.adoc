@@ -1,5 +1,5 @@
 
-= Promise (ES6+) はモナドか？
+= モノイドとモナドの関係
 ifndef::stem[:stem: latexmath]
 ifndef::imagesdir[:imagesdir: ./img/]
 ifndef::source-highlighter[:source-highlighter: highlightjs]
@@ -18,99 +18,505 @@ td>code {background-color: #aaaaaa};
 </style>
 ++++
 
-ES6+ Promiseがモナドだ、としばしば言われますが、モナドではありません。
+だいたい、モノイドとモナドは名前が似すぎています。何らかの密接な関係性がきっとあるのでしょう。
 
-Promiseは事前想定の多すぎるAPIで使いにくいと思うのですが、事前想定が多い１つの弊害として、構造が限定されてしまっている、ということがあります。
+ここでは、まず Arrayモノイドと Arrayモナドの根本的な差を確認してから、関係性をみていきます。
 
-Promiseで　`unit` に相当するのは、`Promise.of` ですが、link:https://stackoverflow.com/questions/45210122/why-cant-promise-resolve-be-called-as-a-function/45210249[そのまま置き換えることは出来ない]ようなので、  `Promise.resolve.bind(Promise)` として、
+== モノイドは２つの単一のタイプの間の二項演算
+
+`Array.concat` を二項演算とするArrayモノイド（３つ組）
+
+[stem]
+++++
+(Array,[\space],concat) 
+++++
+
+は、
+
+[stem]
+++++
+[1,2].concat([3]).concat([4,5])
+++++
+
+[source,js]
+.Array.concat chain
+----
+[1, 2]
+    .concat([3])
+    .concat([4, 5])
+----
+
+とメソッドチェーンで書けます。
+
+- 任意の `Array` の値を `a` 
+
+- `Array.concat` メソッドを二項演算子 `*`
+
+と置き換えてやれば、
+
+[stem]
+++++
+a_{1} * a_{2} = a_{3}
+++++
+
+が基本形で、連鎖できるのだから、
+
+[stem]
+++++
+a_{1} * a_{2} *  ...
+++++
+
+という形になっています。
+
+[stem]
+++++
+1 + 2 = 3
+++++
+[stem]
+++++
+1 + 2 + ...
+++++
+
+と同じことです、念の為。
+
+`Array.concat` は２つのパラメータをとり、１つの返り値がありますが、すべて３つとも同一のタイプで閉じた世界の二項演算です。
+
+== モナドはモナド値とモナド関数の間の二項演算
+
+`Array.flatMap` を二項演算とするArrayモナド（リストモナド）は、
+
+[source,js]
+.Array.flatMap chain
+----
+[1, 2, 3, 4, 5]
+    .flatMap(a => [a * 2])
+    .flatMap(a => [a + 1])
+----
+
+とメソッドチェーンで書けます。同じように
+
+- 任意の `Array` の値を `a` 
+
+- `Array.concat` メソッドを二項演算子 `*`
+
+- モナドが返り値と規定される関数を `f`
+
+と置き換えてやれば、
+
+[stem]
+++++
+a_{1} * f = a_{2}
+++++
+
+が基本形で、連鎖できるのだから、
+
+[stem]
+++++
+a * f_{1} * f_{2} * ...
+++++
+
+という形になっています。
+
+モノイドのように、２つのパラメータ、１つの返り値、すべて３つとも同一のタイプで閉じた世界だ、というのとは根本的に異なります。
+
+Arrayモナドのメソッドである `Array.flatMap` は
+
+1. `Array` の値 `a`
+2. モナド関数 `f`
+
+と二つの異なるタイプの間の二項演算です。
+
+
+
+<<ch_04.adoc#.モナド(Monad)>>で、
+
+> A monad in a bicategory K というのは、とりあえず置いときましょう
+
+の `bicategory` (2つのカテゴリ)とか書かれていたのは、このことです。
+
+
+== モナドはモノイドなのか？
+
+まあ、上記のとおり、モノイドは単一タイプの二項演算で、モナドは二つの異なるタイプの二項演算と根本的に異なるので、答えは__NO__のように思えますが、見方によっては__YES__・・・みたいなことにはならないでしょうか？
+
+そういえば、<<ch_04.adoc#.モナド(Monad)>>の最後に、
+
+[NOTE]
+====
+
+圏論のモナド（monad）の定義をまとめると
+
+1. ベースとして、オブジェクト自身を返す `.map` メソッドを持つendofunctorとしての特性をもつオブジェクトで、さらに以下の２つの関数（メソッド）が付いてる
+2. `unit`
+3. `flat`
+
+さらにまとめて、
+
+[stem] 
+++++ 
+(endofunctor, unit, flat)
+++++
+
+の３つ組（トリプル）のことをモナドと呼びます。
+====
+
+と厳密な圏論のモナド定義がありましたが、`flat` はすでにモナド二項演算として関数合成されてしまって今は、`flatMap` となっていたのでした。
+
+=== モナドの単位元
+
+では今度は、`Array.flatMap` を二項演算とするArrayモナドを、
+`Array.concat` を二項演算とするArrayモノイド（３つ組）
+[stem]
+++++
+(Array,[\space],concat) 
+++++
+
+のように、モノイドの観点から捉えられないか？
+
+[stem]
+++++
+(Array,
+++++
+[stem]
+++++
+flatMapの左右単位元, 
+++++
+[stem]
+++++
+flatMap)
+++++
+
+
+とならないか？
+
+**flatMapの左右単位元** の候補として手元に唯一残っている部品は、`flatMap` に合成されてしまった `flat` と対になる関数 `unit` (`a => [a]`) です。
+
+Arrayモノイドの `Array.concat` メソッドで確認したことは以下です。
+
+
+[NOTE]
+.Array.concat メソッドの二項演算と単位元
+====
+`Array.concat` メソッドで不変の左右の単位元 eとして、
+
+[stem]
+++++
+[\space].concat([1,2])
+++++
+[stem]
+++++
+= [1,2]
+++++
+[stem]
+++++
+=[1,2].concat([\space]) 
+++++
+
+`Array.concat` メソッドを二項演算 `*` と再び捉え直すと、
+
+[stem]
+++++
+[\space]*[1,2] = [1,2] = [1,2]*[\space]
+++++
+
+と、Arrayモノイドの左右の単位元 e は `[ ]` だから、
+
+モノイド（３つ組）
+
+[stem]
+++++
+(Array,[\space],concat) 
+++++
+====
+
+**flatMapの左右単位元** が `unit`
+
+[stem]
+++++
+(Array,unit,flatMap) 
+++++
+
+だと証明するためには、これをリバースエンジニアリングしていければいいでしょう。多分。
+
+`Array.flatMap` メソッドを二項演算 `*` と再び捉え直すと、
+
+[stem]
+++++
+unit*[1,2] = [1,2] = [1,2]*unit
+++++
+
+としたいところですが、これではタイプエラーになります。
+
+`Array.flatMap` は
+
+1. `Array` の値 `a`
+2. モナド関数 `f`
+
+と二つの異なるタイプの間の二項演算
+[stem]
+++++
+a_{1} * f = a_{2}
+++++
+で、右辺はこのタイプで合致しますが、左辺は、最初に `Array` の値 `a` が入るべきところ、`unit` 関数になっているのでタイプが合いません。
+
+逆に、モナド関数 `f` を使っても
+
+[stem]
+++++
+unit*f = f = f*unit
+++++
+
+同じ理由で左右タイプエラーになります。
+
+
+なので、すべての項において、この二項演算に合うようにパラメータと返り値のタイプを合わせます。
+
+[stem]
+++++
+unit(a)*f = f(a) = f(a)*unit
+++++
+
+これが本当に成立していれば、**flatMapの左右単位元** が `unit` だと言えそうです。
+
+二項演算 `*` をまた `Array.flatMap` メソッドに戻して、具体的な値を決め打ちして挙動を検証してみます。
+
+[stem]
+++++
+a = [1,2]
+++++
+
+[stem]
+++++
+f(a) = aの各要素を適当にモナドへマップする関数
+++++
+
+`f` については、<<ch_04.adoc#_リストモナド(List Monad)のつかいかた>>を見返してください。
+
+
+[source,js]
+.Array Monad 左右単位元
+----
+const unit = a => [a];
+
+const a = [1, 2];
+const f = a =>
+          a.flatMap(a => [a * 10, a * 100]); <1>
+
+const left = unit(a).flatMap(f);    <2>
+const center = f(a);                <3>
+const right = f(a).flatMap(unit);   <4>
+
+console.log(left);
+console.log(center);
+console.log(right);
+----
+
+<1> aの各要素を適当にモナドへマップする関数
+<2> stem:[unit(a)*f]  　　左単位元
+<3> stem:[f(a)]
+<4> stem:[f(a)*unit]  　　右単位元
+
+[source,js]
+.Console
+----
+[ 10, 100, 20, 200 ]
+[ 10, 100, 20, 200 ]
+[ 10, 100, 20, 200 ]
+----
+
+本当に成立したので、**flatMapの左右単位元** が `unit` だと言えそうです。
+
+=== モナドの結合法則
+
+あとモノイドの重要な特性として、結合法則を満たしている、というのがあります。
+
+単一タイプ(a,b,c)間の二項演算 `*` をもつモノイドの結合法則は、
+
+[stem]
+++++
+(a * b) * c = a * b * c = a * (b * c)
+++++
+
+モナド値 a とモナド関数(f, g)の２タイプ間の二項演算 `*` をもつモナドの結合法則では、
+
+
+[stem]
+++++
+(a * f) * g = a * f * g = a * (a \Rightarrow a * f * g)
+++++
+
+[TIP]
+.モナド合成関数 fg
+====
+[stem]
+++++
+a * f = a
+++++
+(二項演算の後ろに来るのは必ずモナド関数だ)
+という制約があるため、右辺の結合では、先に
+[stem]
+++++
+a \Rightarrow a * f * g
+++++
+というモナドの合成関数を用意していることに留意してください。
+
+合成関数 fg
+[stem]
+++++
+fg = a \Rightarrow a * f * g
+++++
+と置き換えた上で、結合法則を書き直せば、
+
+[stem]
+++++
+(a * f) * g = a * f * g = a * fg
+++++
+
+となります。
+====
+
 
 
 
 [source,js]
-.Promise 構造テスト
+.Array Monad 結合法則
 ----
-const unit = Promise.resolve.bind(Promise);
+{
+ const array1 =
+  [1, 2, 3]    <1>
+   .flatMap(a => [a * 2])  <1>
+   .flatMap(a => [a + 1]); <1>
 
-const p = unit(3); <1>
-const pp = unit(p); <2>
-const ppp = unit(pp) <3>
+ console.log(array1);
+}
+{
+ const array1 =
+  [1, 2, 3]       <2>
+   .flatMap(      <2>
+    a => [a]                <3>
+     .flatMap(a => [a * 2]) <3>
+     .flatMap(a => [a + 1]) <3>
+   );
 
-console.log(p);
-console.log(pp);
-console.log(ppp);
+ console.log(array1);
+}
+
 ----
 
-<1> ただのPromiseオブジェクト
-<2> 二重にネストしたPromiseオブジェクト？
-<3> 三重に・・・
+<1> stem:[a * f * g]
+<2> stem:[a * fg]
+<3> stem:[a \Rightarrow a * f * g] 　モナド合成関数 `fg`
+
 
 
 [source,js]
 .Console
 ----
-Promise { 3 }
-Promise { 3 }
-Promise { 3 }
+[ 3, 5, 7 ]
+[ 3, 5, 7 ]
 ----
 
-Promiseは、ネストしたPromiseオブジェクトを許容しておらず、ぜんぶ平坦化してしまうようです。
+というか、実はこれ <<ch_04.adoc#.モナド(Monad)>>で、そもそもこういうメソッドチェーンの合成関数の切り出しへの、メソッドチェーンの再接続、ネスト化ってのができないと、関数型プログラミングでは大問題だ！という強い動機をもって、モナド導入した、という本稿の流れだったので、すでに検証は終わってた話なんですね。
 
-つまり、Promiseは、これ
+それは言い換えると、モノイドにもある結合法則のお話だったと。
 
-image::./unitflat1.svg[align="center"]
+== クライスリトリプル（Kleisli triple）
 
-をやっているわけですが、問題は、endofunctor の `map` に相当する　`then` をする **前** に、問答無用で `flat` かましてるんですね。
+このように、
 
-結果、裸の値 or Promise１階層の二択しかありません。Promiseでネストした構造をもつことは出来ません。
+> https://stackoverflow.com/questions/3870088/a-monad-is-just-a-monoid-in-the-category-of-endofunctors-whats-the-problem[
+A monad is just a monoid in the category of endofunctors, what's the problem?]
 
-本稿で何度も例に出てくる数字や文字列は、モノイドでありモナドですが、これらもご存知の通り、内部構造を持てません。
+**「モナドっていうのは、ただ単に、自己関手(endofunctor)の圏の中におけるモノイドのことなんだよ、なにか問題でも？」**
+などと時折言われるわけですが、モナドをモノイドとして捉え、オブジェクト、二項演算、左右単位元の３つ組（トリプル）にしたもの
+
+[stem]
+++++
+(endofunctor,unit,flatMap) 
+++++
+
+を、link:https://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%AA%E5%9C%8F#%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%B9%E3%83%AA%E3%83%88%E3%83%AA%E3%83%97%E3%83%AB%EF%BC%88Kleisli_triple%EF%BC%89[クライスリトリプル（Kleisli triple）]と呼びます。
+
+
+[TIP]
+.比較してみよう　ふたつのトリプル
+====
+圏論で一般的に定義されるモナド（monad）/トリプル
+
+[stem] 
+++++ 
+(endofunctor, unit, flat)
+++++
+
+クライスリトリプル（Kleisli triple）
+[stem]
+++++
+(endofunctor,unit,flatMap) 
+++++
+
+筆者の感想。
+
+`.map` と `.flat` 合成して `.flatMap` と単独の二項演算子としたことで、モノイドのパースペクティブが得られたのは良かったし、両トリプルの表記もよく整合している。
+
+====
+
+
+
+== モナド則(Monad Laws)
+さらに推し進め、モノイドの用語をまるまる踏襲した上で法則として列挙したのがモナド則(Monad Laws)です。
+
+すでに書いていますが、再掲すると、
+
+=== 左右の単位元
+
+[stem]
+++++
+unit(a)*f = f(a) = f(a)*unit
+++++
+
+=== 結合法則
+
+[stem]
+++++
+(a * f) * g = a * f * g = a * (a \Rightarrow a * f * g)
+++++
+
+ですね。
+
+[WARNING]
+.モナド則解読不能版
+====
+
+モナド則は、さらに天下り的に解読不能にするために、左単位元と右単位元にバラされた上で、右単位元の `f(a)` は 「どうせモナド値なのだから」と実用上の利点はあるにせよ、特に断りもなく単に `m` として簡約され、方程式の左右を入れ替えられたり、いろいろした結果、
+
+- 左単位元(LEFT IDENTITY)　　stem:[unit(a)*f = f(a)]
+
+- 右単位元(RIGHT IDENTITY)　stem:[m*unit = m]
+
+- 結合法則(ASSOCIATIVITY)　 stem:[(m * f) * g = m * (x \Rightarrow x * f * g)]
+
+という感じでエンドユーザに提供されることが多いようです。
+
+とりあえず、モノイドのことを知らない人、知っててもモナドとの関連がわからない人には、特に上のように変形されて対称性がわかりにくい左右の単位元とか解読不能でしょう。
+
+あとHaskell特有の二項演算子の記号と、Syntaxで表記されることが多いので、HaskellのSyntaxがわからない人はお手上げです。
+
+====
+
+モナドの二項演算 `*` を　`Array.flatMap` メソッドとして具体化して書き直すと、
+
+
 
 [source,js]
-.Number String 構造テスト
+.Array Monad 左右単位元
 ----
-{
- const unit = Number;
-
- const n = unit(1);
- const nn = unit(n);
-
- console.log(n);
- console.log(nn);
-}
-{
- const unit = String;
-
- const s = unit("Hello");
- const ss = unit(s);
-
- console.log(s);
- console.log(ss);
-}
+const left = unit(a).flatMap(f);    
+const center = f(a);                
+const right = f(a).flatMap(unit);  
 ----
 
-[source,js]
-.Console
-----
-1
-1
-Hello
-Hello
-----
-
-しかし、数字と文字列がPromiseと違うのは、構造が自分自身の１種類だけなんですね。Promiseは、別のタイプの裸の値かPromiseの値か２種類。
-
-ネストした数字や文字列っていうのは、（ここで扱っているものに限れば）はなっから存在せず、構造持たない１種類で整合性が取れてますが、Promiseはそうではないので整合性が取れません。
-
-モナドというのは、このように、
-
-image::./unitflat5.svg[align="center"]
-
-自由に階層と構造を指定できるので、ここであえてモナド則を持ち出すまでもなく、Promiseがモナドではない、というのは明らかです。
-
-ネストできるだろうと想定してPromise自身を受け渡す `Promise.then` メソッドを無理やり組むと、それ以前に即座に `flat` かまされているわけですから、タイプエラーが出るでしょう。モナド則（モノイド則）で言うと、Promiseオブジェクトをモナド値としたときの結合法則が成り立ちません。
-
-Promiseがネスト構造の操作を許容しない、ということで得られるメリットとは？ちょっと思いつかないですね。
+となりますが、これは `Array.flatMap` に限った構造ではなく、他のモナド実装でも同じ様相になります。もちろん、`unit` `flatMap` などの名前は実装者の好み、さじ加減１つなので、ケースバイケースです。
 
 == まとめ
 
-自由に内部構造（ネスト構造）を持てないオブジェクトはモナドではない。ただし、数字、文字列などは最初から自身でネストしてるような構造(JavaScriptのPrimitive)は除く。それ以外にもさらに何か特別な例外がある可能性までは厳密に検証はしていないが、少なくともPromiseがモナドでないことは明らか。
+モナドを知るときは、同時にモノイドのことも知っておこう。

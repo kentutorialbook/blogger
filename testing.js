@@ -1,52 +1,36 @@
-/*const f = p => p.then(n => n * 2);
+const unit = a => [a];
 
-const a = Promise.resolve(1);
 
-const center = f(a);
-console.log(center);
 
-const output = Promise.resolve(a).then(f);
-*/
-/*{
- const unit = Promise.resolve.bind(Promise);
 
- const p = unit(3);
- console.log(p);
 
- const f = p => p.then(p => p * 2);
 
- const center = f(p);
+const plus9 = a =>
+    unit(a)
+        .flatMap(n => unit(n + 9));
 
- console.log(center);
- const left = unit(p).then(f);
 
-}*///
+const oddFilter = a =>
+    unit(a)
+        .flatMap(n =>
+            n % 2 === 1
+                ? unit(n)
+                : []
+        );
 
-const unit = Promise.resolve.bind(Promise);
+const array1 = [1, 2, 3, 4, 5];
 
-const p = unit(3);
-const pp = unit(p);
-const ppp = unit(pp)
+const array3 = array1
+    .flatMap(plus9)
+    .flatMap(oddFilter);
 
-console.log(p);
-console.log(pp);
-console.log(ppp);
+const plus9oddFilter = a =>
+    unit(a)
+        .flatMap(plus9)
+        .flatMap(oddFilter);
 
-{
- const unit = Number;
+const array4 = array1
+    .flatMap(plus9oddFilter);
 
- const n = unit(1);
- const nn = unit(n);
+console.log(array4);
 
- console.log(n);
- console.log(nn);
-}
-{
- const unit = String;
-
- const s = unit("Hello");
- const ss = unit(s);
-
- console.log(s);
- console.log(ss);
-}
