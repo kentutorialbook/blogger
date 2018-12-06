@@ -428,7 +428,8 @@ fg = a \Rightarrow a * f * g
 A monad is just a monoid in the category of endofunctors, what's the problem?]
 
 **「モナドっていうのは、ただ単に、自己関手(endofunctor)の圏の中におけるモノイドのことなんだよ、なにか問題でも？」**
-などと時折言われるわけですが、モナドをモノイドとして捉え、オブジェクト、二項演算、左右単位元の３つ組（トリプル）にしたもの
+などと時折言われるわけですが、モナドをモノイドとして捉え、 + 
+(オブジェクト、左右単位元、二項演算)の３つ組（トリプル）にしたもの
 
 [stem]
 ++++
