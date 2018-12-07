@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_モナドが難しい">1. モナドが難しい？</a>
 <ul class="sectlevel2">
-<li><a href="#_モナドを理解するのが難しい理由">1.1. モナドを理解するのが難しい理由</a></li>
+<li><a href="#whysohard">1.1. モナドを理解するのが難しい理由</a></li>
 </ul>
 </li>
 <li><a href="#_javascriptプログラマのためのモナド入門">2. JavaScriptプログラマのためのモナド入門</a>
@@ -464,34 +464,35 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_まとめ">3.5. まとめ</a></li>
 </ul>
 </li>
-<li><a href="#_モナドmonadとは何か">4. モナド(Monad)とは何か？</a>
+<li><a href="#whatsmonad">4. モナド(Monad)とは何か？</a>
 <ul class="sectlevel2">
 <li><a href="#_array_map">4.1. Array.map</a></li>
 <li><a href="#_array_mapと関数型プログラミングの限界">4.2. Array.mapと関数型プログラミングの限界</a></li>
 <li><a href="#_array_flat_の登場">4.3. Array.flat の登場</a></li>
-<li><a href="#_unit">4.4. unit</a></li>
-<li><a href="#_モナドmonad">4.5. モナド(Monad)</a></li>
-<li><a href="#_まとめ_2">4.6. まとめ</a></li>
+<li><a href="#_unit_の定義">4.4. unit の定義</a></li>
+<li><a href="#_unit_と_array_flat_の対称性">4.5. unit と Array.flat の対称性</a></li>
+<li><a href="#_モナドmonad">4.6. モナド(Monad)</a></li>
+<li><a href="#conclusion">4.7. まとめ</a></li>
 </ul>
 </li>
-<li><a href="#_リストモナドlist_monadのつかいかた">5. リストモナド(List Monad)のつかいかた</a>
+<li><a href="#howto">5. リストモナド(List Monad)のつかいかた</a>
 <ul class="sectlevel2">
 <li><a href="#_リストモナドでリスト構造をコントロールする">5.1. リストモナドでリスト構造をコントロールする</a></li>
 <li><a href="#_array_flatmapの登場">5.2. Array.flatMapの登場</a></li>
 <li><a href="#_array_flatmapとモナド関数">5.3. Array.flatMapとモナド関数</a></li>
 <li><a href="#_モナド関数の動作確認">5.4. モナド関数の動作確認</a></li>
 <li><a href="#_モナド関数は必ずモナドを返す">5.5. モナド関数は必ずモナドを返す</a></li>
-<li><a href="#_モナド関数を設計する">5.6. モナド関数を設計する</a></li>
-<li><a href="#_まとめ_3">5.7. まとめ</a></li>
+<li><a href="#monadfunction">5.6. モナド関数を設計する</a></li>
+<li><a href="#_まとめ_2">5.7. まとめ</a></li>
 </ul>
 </li>
 <li><a href="#relation">6. 代数学と関数型プログラミングとオブジェクト指向の用語・記法の相互関係</a>
 <ul class="sectlevel2">
 <li><a href="#_二項演算とは小学１２年の算数からの復習">6.1. 二項演算とは　小学１/２年の算数からの復習</a></li>
 <li><a href="#_演算は関数として捉えられる">6.2. 演算は関数として捉えられる</a></li>
-<li><a href="#_オブジェクト指向のメソッドでは">6.3. オブジェクト指向のメソッドでは</a></li>
+<li><a href="#withobjectmethod">6.3. オブジェクト指向のメソッドでは</a></li>
 <li><a href="#_値と演算は常に組ペアで存在する">6.4. 値と演算は常に組（ペア）で存在する</a></li>
-<li><a href="#_まとめ_4">6.5. まとめ</a></li>
+<li><a href="#_まとめ_3">6.5. まとめ</a></li>
 </ul>
 </li>
 <li><a href="#_モノイドmonoid">7. モノイド(Monoid)</a>
@@ -500,24 +501,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_なぜモノイドと結合法則が重要なのか">7.2. なぜモノイドと結合法則が重要なのか？</a></li>
 <li><a href="#_単一のタイプで自己完結">7.3. 単一のタイプで自己完結</a></li>
 <li><a href="#_arrayリスト配列はモノイド">7.4. Array（リスト・配列）は、モノイド</a></li>
-<li><a href="#_まとめ_5">7.5. まとめ</a></li>
+<li><a href="#_まとめ_4">7.5. まとめ</a></li>
 </ul>
 </li>
 <li><a href="#_モノイドとモナドの関係">8. モノイドとモナドの関係</a>
 <ul class="sectlevel2">
 <li><a href="#_モノイドは２つの単一のタイプの間の二項演算">8.1. モノイドは２つの単一のタイプの間の二項演算</a></li>
-<li><a href="#_モナドはモナド値とモナド関数の間の二項演算">8.2. モナドはモナド値とモナド関数の間の二項演算</a></li>
+<li><a href="#bicategory">8.2. モナドはモナド値とモナド関数の間の二項演算</a></li>
 <li><a href="#_モナドはモノイドなのか">8.3. モナドはモノイドなのか？</a></li>
 <li><a href="#_クライスリトリプルkleisli_triple">8.4. クライスリトリプル（Kleisli triple）</a></li>
 <li><a href="#_モナド則monad_laws">8.5. モナド則(Monad Laws)</a></li>
-<li><a href="#_まとめ_6">8.6. まとめ</a></li>
+<li><a href="#_まとめ_5">8.6. まとめ</a></li>
 </ul>
 </li>
 <li><a href="#_promise_es6_はモナドか">9. Promise (ES6+) はモナドか？</a>
 <ul class="sectlevel2">
-<li><a href="#_まとめ_7">9.1. まとめ</a></li>
+<li><a href="#_まとめ_6">9.1. まとめ</a></li>
 </ul>
 </li>
+<li><a href="#_ミュータブルな状態ioそしてモナド">10. ミュータブルな状態、IO、そしてモナド</a></li>
 </ul>
 </div>
 </div>
@@ -550,6 +552,13 @@ td >code {background-color: #aaaaaa};
 <div class="paragraph">
 <p>を解説しています。</p>
 </div>
+<div class="paragraph">
+<p>「30分でわかる」のは、だいたい、<br>
+<strong>4. モナド(Monad)とは何か？</strong><br>
+の読了までを想定しています。 <br>
+また速い人なら、30分で全部一気に読み通せる分量でもあると思います。 <br>
+30分以上かかっても一気読みしてしまうことが推奨されますし、一気読みできるように、前に戻って知識の再確認をしなくて済むように、最大限留意して構成を設計した上で執筆されています。</p>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -559,12 +568,12 @@ td >code {background-color: #aaaaaa};
 <p>巷の解説が混乱に満ちあふれている・・・</p>
 </div>
 <div class="sect2">
-<h3 id="_モナドを理解するのが難しい理由">1.1. モナドを理解するのが難しい理由</h3>
+<h3 id="whysohard">1.1. モナドを理解するのが難しい理由</h3>
 <div class="ulist">
 <ul>
 <li>
 <p><strong>数学と用語問題。</strong>モナドの理論的基盤として圏論があるのは事実。理論的基盤がしっかりしているのはプログラミングという数学的作業において歓迎すべきことではある一方で、他方そのため一般的なプログラマにとってはまず用語に馴染みがない。歴史的に、圏論ベースのモナドを理論から関数型プログラミングに応用されていく過程では、実際、先駆者の間でさえ紆余曲折があったのだが、学習者へは馴染みのない用語を伴って、いきなり高度な数学的概念全開で天下り的に提示されてしまうことが多い。わかっている人、そもそも実用性以上に数学性、理論的側面に興味がある人にとっては知的好奇心を掻き立てられるトピックではあるが、そうでないプログラマにとっては「難しい、とっつきにくい、学習コストが大きすぎて実用性もよくわからない」となることが多い。「わからないの？ならとりあえず、巷の半端な解説より
-<a href="http://homepages.inf.ed.ac.uk/wadler/topics/monads.html">Philip Wadler先生の数々の素晴らしい論文</a>を読んだほうがいい！」という人もいるが、ほとんどの学習者にとって、そういうアドバイスをされる時点で、このアプローチは絶望的である。そもそも彼らには初学者に向けて噛み砕いて教えるつもりはない。というか、実は小中高で習った数学レベルで十分だ。</p>
+<a href="http://homepages.inf.ed.ac.uk/wadler/topics/monads.html">Philip Wadler先生の数々の素晴らしい論文</a>を読んだほうがいい！」という人もいるが、ほとんどの学習者にとって、そういうアドバイスをされる時点で、このアプローチは絶望的である。そもそも彼らには初学者に向けて噛み砕いて教えるつもりはない。そして、実はモナドを理解するために高度な数学の素養は不要。小中高で習った数学レベルで十分だ。</p>
 </li>
 <li>
 <p><strong>逆に過度に理論面を放棄した解説を読んだ結果、余計にわけわからなくなった問題。</strong> モナド解説に限らず科学分野の一般読者向け解説記事でアルアル。比喩、例示という極めて高度な芸術的作業が不十分なため、一瞬わかったような錯覚にさせられはするが、実際はなにもわかっておらず、その後長期間に渡り理解の不整合に苦しむ羽目になる、という不幸なパターン。読者、特にプログラマは馬鹿ではないので、そういう読者の知性を愚弄する真似は努めて避けるべき。小中高レベルの数学で十分ならばちゃんと説明すればいいだけのこと。それができないというのは、説明者自身が理解していない証拠。</p>
@@ -632,7 +641,7 @@ td >code {background-color: #aaaaaa};
 <div class="sect2">
 <h3 id="_本稿のアプローチ">2.2. 本稿のアプローチ</h3>
 <div class="paragraph">
-<p><a href="#_モナドを理解するのが難しい理由">モナドを理解するのが難しい理由</a>をアンチパターンとして最大限留意しています。</p>
+<p><a href="#whysohard">モナドを理解するのが難しい理由</a>をアンチパターンとして最大限留意しています。</p>
 </div>
 </div>
 </div>
@@ -669,7 +678,8 @@ td>code {background-color: #aaaaaa};
 </ul>
 </div>
 <div class="paragraph">
-<p>の組み合わせ（function composition）で制御します。（この２つの組み合わせについては後で詳しく説明します。）</p>
+<p>の組み合わせ（function composition）で制御します。
+<a href="#relation">代数学と関数型プログラミングとオブジェクト指向の用語・記法の相互関係</a> 以降で詳しく解説します。</p>
 </div>
 <div class="sect2">
 <h3 id="_jquery">3.1. jQuery</h3>
@@ -801,7 +811,7 @@ td>code {background-color: #aaaaaa};
 </div>
 </div>
 <div class="sect1">
-<h2 id="_モナドmonadとは何か">4. モナド(Monad)とは何か？</h2>
+<h2 id="whatsmonad">4. モナド(Monad)とは何か？</h2>
 <div class="sectionbody">
 <style type="text/css">
 p>code {background-color: #aaaaaa};
@@ -815,7 +825,7 @@ td>code {background-color: #aaaaaa};
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>Haskellerにとっては「モナドとはすでに手元にあるもの」であり、手元あるいは、足場となる言語を活用するための学習モティベーションも極めて高い。裏を返すと、Haskellerでないその他大勢のプログラマにとっては以上の事実は逆風となる。 <a href="#_モナドを理解するのが難しい理由">モナドを理解するのが難しい理由</a></p>
+<p>Haskellerにとっては「モナドとはすでに手元にあるもの」であり、手元あるいは、足場となる言語を活用するための学習モティベーションも極めて高い。裏を返すと、Haskellerでないその他大勢のプログラマにとっては以上の事実は逆風となる。 <a href="#whysohard">モナドを理解するのが難しい理由</a></p>
 </div>
 </blockquote>
 </div>
@@ -852,7 +862,7 @@ td>code {background-color: #aaaaaa};
 </ul>
 </div>
 <div class="paragraph">
-<p>と三拍子揃っています。</p>
+<p>と、まさに早い安いうまいの三拍子揃っています。</p>
 </div>
 <div class="paragraph">
 <p>まずは、<code>Array</code>　のモナドではない部分を復習して、それからモナドである部分を紹介します。</p>
@@ -909,7 +919,7 @@ console.log(array2);</code></pre>
 <p>ことです。</p>
 </div>
 <div class="paragraph">
-<p>このような性質を備えるオブジェクトのことを、圏論の用語では<br>
+<p>このような性質のメソッドを持つオブジェクトのことを、圏論の用語では<br>
 <a href="https://ncatlab.org/nlab/show/endofunctor">endofunctor</a>(自己関手)と呼びます。</p>
 </div>
 <div class="admonitionblock caution">
@@ -941,7 +951,7 @@ console.log(array2);</code></pre>
 <p><code>Array.map</code> は、自分自身＝ <code>Array</code> オブジェクトを返してくる、というのは非常に重要な特性があるので、endofunctor(自己関手)で、そこは外せません。しかし、Haskellコミュニティの因習から、単に、functorと呼んでしまうことが多いようです。</p>
 </div>
 <div class="paragraph">
-<p><a href="https://www.quora.com/Why-is-functor-in-Haskell-defined-like-the-endofunctor-from-category-theory"><strong>Why is functor in Haskell defined like the endofunctor from category theory?</strong></a>(<strong>なぜ、Haskellのfunctorは、圏論のendofunctorみたいな定義になってるの？</strong>)という極めてまっとうな疑問が出て、"Convenience and history." 便利さと歴史的経緯のせいだ。(中略) Endofunctorというタイプクラス（型クラス・type class）名よりも、Functorという名前のほうが" much nicer name"だ。正確じゃないかもしれないが機能している・・・<br>
+<p><a href="https://www.quora.com/Why-is-functor-in-Haskell-defined-like-the-endofunctor-from-category-theory"><strong>Why is functor in Haskell defined like the endofunctor from category theory?</strong></a>(<strong>なぜ、Haskellのfunctorは、圏論のendofunctorみたいな定義になってるの？</strong>)という極めてまっとうな疑問が出て、"Convenience and history." 便利さと歴史的経緯のせいだ。(中略) endofunctorというタイプクラス（型クラス・type class）名よりも、Functorという名前のほうが" much nicer name"だ。正確じゃないかもしれないが機能している・・・<br>
  と、こういったノリです。しかし圏論用語だからとだけ聞かされている初学者にとってはそんなことは知ったことではないわけで、この混乱による質問は定期的に出るようです。</p>
 </div>
 <div class="paragraph">
@@ -979,9 +989,6 @@ console.log(array2);</code></pre>
 </div>
 <div class="paragraph">
 <p>jQueryが便利だ、というのも、モナドどうこう言う以前に、ほぼほぼこのendofunctor(自己関手)がもつ関数型的特性とメソッドチェーンのメリットが大きいです。</p>
-</div>
-<div class="paragraph">
-<p>さらに、（冒頭で指摘した）IOが純粋関数型で処理できるからモナドがマジカルだという錯覚についても、別にモナドを持ち出すまでもなく、このEndofunctor(自己関手)だけで実現可能です。</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1186,7 +1193,7 @@ console.log(array2);</code></pre>
 <p>もうにっちもさっちもいかないので、ここが <code>Array.map</code> の関数型プログラミングでの限界です。</p>
 </div>
 <div class="paragraph">
-<p><code>Array.map</code> は、自分自身＝ <code>Array</code> を返すというEndofunctor(自己関手)の特性があり、メソッドチェーンが出来るのだが、<strong>メソッドチェーンが入れ子構造になると、自身の構造をコントロールできなくなる</strong> のです。</p>
+<p><code>Array.map</code> は、自分自身＝ <code>Array</code> を返すというendofunctor(自己関手)の特性があり、メソッドチェーンが出来るのだが、<strong>メソッドチェーンが入れ子構造になると、自身の構造をコントロールできなくなる</strong> のです。</p>
 </div>
 <div class="paragraph">
 <p>関数型プログラミングにとって、これは結構な大問題だとは思いませんか？</p>
@@ -1229,9 +1236,12 @@ arr2.flat();
 </div>
 </div>
 <div class="sect2">
-<h3 id="_unit">4.4. unit</h3>
+<h3 id="_unit_の定義">4.4. unit の定義</h3>
 <div class="paragraph">
-<p><code>unit = a &#8658; [a]</code> を定義しておきます。</p>
+<p>JavaScriptは、裸の値を <code>Array</code> にしたり、すでにある配列・要素をさらにネストしたいとは、各々の値を <code>[]</code> でくくればよいだけなので直感的で良いですが、これはれっきとした、値の変換なので、今後のためにちゃんと関数としておきましょう。</p>
+</div>
+<div class="paragraph">
+<p><code>unit = a &#8658; [a]</code> と定義しておきます。</p>
 </div>
 <div class="listingblock">
 <div class="title">unit(a) = [a]</div>
@@ -1240,17 +1250,31 @@ arr2.flat();
 
 console.log(
     unit(7)
+);
+
+console.log(
+    unit([7])
 );</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Console</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">[ 7 ]</code></pre>
+<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">[ 7 ]
+[ [ 7 ] ]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p><code>unit</code> と <code>flat</code> は数学的な対称性(<a href="https://en.wikipedia.org/wiki/Symmetry_in_mathematics">Symmetry in mathematics</a>)があります。</p>
+<p>特に問題ないですね？</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_unit_と_array_flat_の対称性">4.5. unit と Array.flat の対称性</h3>
+<div class="paragraph">
+<p>なんでわざわざ <code>unit</code> を定義したのか？というと、以下の話をしたいからです。</p>
+</div>
+<div class="paragraph">
+<p><code>unit</code> と <code>flat</code> を図式化するとこうなります。</p>
 </div>
 <div class="imageblock" style="text-align: center">
 <div class="content">
@@ -1258,10 +1282,26 @@ console.log(
 </div>
 </div>
 <div class="paragraph">
-<p>どちらも、関数の出力値は、<code>Array</code> 一択です。</p>
+<p><strong>どちらも、関数の出力値は、<code>Array</code> 一択</strong> です。ここ重要。</p>
 </div>
 <div class="paragraph">
-<p>まあ、見たとおり、対称性があって単純で美しい構造だと思うのですが、これは何気に奥深くて、まるで論理クイズみたいな様相を呈します。なぜならば、実は <code>flat</code> が <code>unit</code> と厳密には対称ではないからです。</p>
+<p>まあ、対称性があるように見えて単純で美しい構造だと思うのですが、これは何気に奥深くて、まるで論理クイズみたいな様相を呈します。</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>unit</code> と <code>flat</code> を眺めると、どうも双方は明らかな対称性があるようだ。</p>
+</li>
+<li>
+<p>双方の関数の出力値は、<code>Array</code> 一択という強い縛りが効いている。</p>
+</li>
+<li>
+<p>ならば、双方は対称にはなりえない。</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>意味わかります？</p>
 </div>
 <div class="paragraph">
 <p>この界隈では、「コンテナに入れる」「箱に入れる」「箱から出す」「ラップする」「一枚皮を剥く」「カラに入れる」「カラから出す」はたまた「純粋にする」とか「リフト（アップ）」するとかいろんな言い草がありますが、ここでは単純に「階層」の上下関係で上げる、下げると言いましょう。</p>
@@ -1272,10 +1312,10 @@ console.log(
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><code>unit</code> は１階層だけ上げます。</p>
+<p><code>unit</code> は１階層だけ上げる。（さっき実際そのとおり定義した）</p>
 </li>
 <li>
-<p><code>flat</code> は<em>ネストしていれば</em>１階層だけ下げます。</p>
+<p><code>flat</code> は<em>ネストしていれば</em>１階層だけ下げる。</p>
 </li>
 </ol>
 </div>
@@ -1329,7 +1369,7 @@ console.log(
 </table>
 </div>
 <div class="paragraph">
-<p><code>Array.flat</code> は、もし <code>Array</code> がネストしてたら、１階層下げて <code>Array</code> を返しますが、ネストしていなかったらそのままの <code>Array</code> を返します。最後の配列の皮を剥いで、中の生の値 <code>7</code> を返すようなことはありません。</p>
+<p><code>Array.flat</code> は、もし <code>Array</code> がネストしてたら、１階層下げて <code>Array</code> を返しますが、ネストしていなかったらそのままの <code>Array</code> を返します。最後の配列の皮を剥いで、裸の値 <code>7</code> を返すようなことはありません。</p>
 </div>
 <div class="paragraph">
 <p>つまり、<code>Array.flat</code> の返り値は必ず <code>Array</code> タイプである、中の値を裸では提供はしません、という基底が保証されています。</p>
@@ -1341,7 +1381,7 @@ console.log(
 <p><code>Array.flat</code>　の仕様あるいは、<code>flat</code> という共通概念の特性は、 <a href="#challenge">f関数の利用@map ダメ元</a>チャレンジの結果、裸の値に <code>.map</code> してしまいタイプエラーが出るような不整合を未然に防止してくれそうです。</p>
 </div>
 <div class="paragraph">
-<p><code>flat</code> しても、基底はある！しれっと条件分岐でそこはしっかり保証！されたところで、あとは、<code>unit</code> と <code>flat</code> の上下移動の対称性をもって、どの階層にも自由に移動できます。</p>
+<p><code>flat</code> しても基底で止まるように条件分岐でしっかり保証！されたところで、あとは、<code>unit</code> と <code>flat</code> の上下移動の対称性をもって、どの階層にも自由に移動させながら、<code>Array.map</code> メソッドが使えるようになる・・・はずです。</p>
 </div>
 <div class="imageblock" style="text-align: center">
 <div class="content">
@@ -1349,19 +1389,50 @@ console.log(
 </div>
 </div>
 <div class="paragraph">
-<p>誤解しがちなのですが、エコが破綻する裸の値はまずいですが、ネストした構造が別に悪いわけではありません。ネストした <code>Array</code> を扱いたいのならば、そのネスト構造を扱うことも含め自由にコントロールできます。どうやって自由にコントロールするか？というのは、モナドの使い方の話になってくるので、後で説明します。</p>
+<p>こうしてみると、<code>unit</code> と　<code>flat</code> は概ね対称的ペアだけど非対称だ、というのがよりはっきりわかると思います。</p>
+</div>
+<div class="paragraph">
+<p>また、エコが破綻する裸の値はまずいですが、ネストした構造が別に悪いわけではありません。ネストした <code>Array</code> を扱いたいのならば、そのネスト構造を扱うことも含め自由にコントロールしながら、<code>Array.map</code> することができる・・・はずです。</p>
+</div>
+<div class="paragraph">
+<p>要するに、<code>Array.map</code> こいつ単独ではどうも役不足だ。特にメソッドチェーンでネストしたら途端に構造が破綻するので扱いづらくてかなわん・・・ここはひとつ、構造に直接アプローチできる、対になった <code>unit</code> と <code>flat</code> ペアを導入してやって、なおかつ、<code>flat</code> が裸の値を返さないような安全装置つきなら、言うことないだろう・・・そういう理屈（皮算用）が今進行しているわけです。</p>
 </div>
 <div class="paragraph">
 <p>ああ、紹介が遅れましたが、今話しているこれがモナドです。</p>
 </div>
+<div class="paragraph">
+<p>世の常として結果論ですが、結果的にこの理屈はうまく機能します。</p>
+</div>
+<div class="paragraph">
+<p>じゃあ実際どうやって上手く機能するんだ？ってことになるわけですが、ポイントは、モナドっていうのは、関数型プログラマコミュニティ（Haskell）がもてはやす前から、圏論で定義される数学的構造として存在していて、それをどうやって上手く使うのか？っていうのは、また別の話なんですね。だから、特にモナドの紹介をするときにIOだのピュアだの言うのは、完全にお門違いです。</p>
+</div>
+<div class="paragraph">
+<p>Arrayが自身の構造にアプローチできるモナドになった結果、実際いかに便利になりうるか？というのは、次の章から説明します。</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_モナドmonad">4.5. モナド(Monad)</h3>
+<h3 id="_モナドmonad">4.6. モナド(Monad)</h3>
 <div class="paragraph">
-<p>なんのことはない、<code>Array</code> で言えば、普通の <code>Array.map</code> に <code>Array.flat</code> を付け加えたものがモナドになります。</p>
+<p>なんのことはない、<code>Array</code> で言えば、普通の <code>Array.map</code> に <code>Array.flat</code> を付け加えたものがモナドになります。 <code>unit</code> というのは、<code>[]</code> なので最初からあるといえばありました。</p>
 </div>
 <div class="paragraph">
-<p><code>Array.map</code> という単独APIだけでは、自身の構造のコントロールはできないendofunctorというだけですが、そこへさらに <code>Array.flat</code> が加えることにより、数学的な対称性が得られて、構造をコントロールできるようになるのが、モナド(Monad)です。</p>
+<p>自身の構造をコントロールしながらマップするためには、</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>自分自身のオブジェクト <code>Array</code> を返す <code>Array.map</code> がベースとしてある endofunctor　(<code>Array</code> オブジェクト)</p>
+</li>
+<li>
+<p>1階層上げる <code>unit</code></p>
+</li>
+<li>
+<p>(もしネストしていたら)1階層下げる <code>Array.flat</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>この3点セットで <code>Array</code> は、Arrayモナド(Monad)になります。</p>
 </div>
 <div class="paragraph">
 <p>念の為に読者へ保証しておきますが、これは、圏論でちゃんと定義づけされているモナド(Monad)のことです。プログラミングのモナドで定義が異なる、という例のトリッキーなアレではありません。</p>
@@ -1375,7 +1446,7 @@ console.log(
 <td class="content">
 <div class="paragraph">
 <p>一応裏を取ってみせる必要はあると思うので、とりあえず、英語版Wikipediaの
-<a href="https://en.wikipedia.org/wiki/Monad_(category_theory)">Monad (category theory)</a>と、Wikipediaは信頼性がちょっと・・・と言う人も必ずいるので、Web上の圏論の情報では一番豊富で信頼性が高いと思われるnLabを参照します。</p>
+<a href="https://en.wikipedia.org/wiki/Monad_(category_theory)">Monad (category theory)</a>と、Wikipediaは信頼性がちょっと・・・と言う人も必ずいるので、Web上の圏論の情報では一番豊富で信頼性が高いと思われる<a href="https://ncatlab.org/nlab/show/HomePage">nLab</a>を参照します。</p>
 </div>
 <div class="paragraph">
 <p>どうせnLabと重複するので、英語版Wikipediaは冒頭だけ。</p>
@@ -1424,7 +1495,7 @@ console.log(
 </div>
 <hr>
 <div class="paragraph">
-<p>A monad in a bicategory K というのは、とりあえず置いときましょう。難しいことではまったくないので後でじっくり説明します。</p>
+<p>A monad in a bicategory K というのは、とりあえず置いときましょう。<a href="#bicategory">モナドはモナド値とモナド関数の間の二項演算</a></p>
 </div>
 <div class="ulist">
 <ul>
@@ -1474,7 +1545,7 @@ console.log(
 </div>
 </div>
 <div class="sect2">
-<h3 id="_まとめ_2">4.6. まとめ</h3>
+<h3 id="conclusion">4.7. まとめ</h3>
 <div class="paragraph">
 <p>圏論のモナド（monad）の定義をまとめると</p>
 </div>
@@ -1503,13 +1574,13 @@ console.log(
 <p>をモナドと呼びます。</p>
 </div>
 <div class="paragraph">
-<p>３つ組（トリプル）、オブジェクト、関数、メソッドという言葉遣い、きちんとした意味、さらに、bicategoryのことなど、後で詳しく解説します。</p>
+<p>３つ組（トリプル）、オブジェクト、関数、メソッドという言葉遣い、きちんとした意味、さらに、bicategoryのことなどは、6章 <a href="#relation">代数学と関数型プログラミングとオブジェクト指向の用語・記法の相互関係</a> 以降で詳しく解説します。</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_リストモナドlist_monadのつかいかた">5. リストモナド(List Monad)のつかいかた</h2>
+<h2 id="howto">5. リストモナド(List Monad)のつかいかた</h2>
 <div class="sectionbody">
 <style type="text/css">
 p>code {background-color: #aaaaaa};
@@ -2142,8 +2213,8 @@ console.log(array2);</code></pre>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-<div class="ulist">
 <div class="title">モナドの構成要素となっている関数はすべてモナドを返す</div>
+<div class="ulist">
 <ul>
 <li>
 <p><code>unit</code></p>
@@ -2163,9 +2234,68 @@ console.log(array2);</code></pre>
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Array.flatMapは必ずしもモナド関数を要請しない</div>
+<div class="paragraph">
+<p><code>Array.flatMap</code> メソッドのモナドとしてのポテンシャルを最大限引き出すためには、モナド関数でコントロールする統一的視点で利用するのは言うまでもありませんが、<code>Array.flatMap</code> は必ずしもモナド関数を要請しません。</p>
+</div>
+<div class="paragraph">
+<p>たとえば、</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Array.map</code> の互換　同じ階層にマップする</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Array.flatMap</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">const array1 = [1, 2, 3, 4, 5];
+
+const array2 = array1
+    .flatMap(a =&gt; a * 2);　<i class="conum" data-value="1"></i><b>(1)</b>
+
+console.log(array2);</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>a &#8658; [a * 2]</code> モナド関数 &#8230;&#8203;. ではなく、あえて非モナド関数である <code>a &#8658; a * 2</code> を使う</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">Console</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">[ 2, 4, 6, 8, 10 ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>タイプエラーが出ることもなく、<code>Array.map</code> と同じ結果が出てきました。なぜでしょうか？</p>
+</div>
+<div class="paragraph">
+<p><code>a &#8658; a * 2</code> というのは、操作対象が、「ネストしているモナドならば」階層１つ下げたモナド値を返す、というモナド関数となりえますが、今のケースのように操作対象がネストしていないモナドの場合は裸の値を返してしまっているわけでモナド関数ではありません。しかしそれでもタイプエラーが出ないのは、<code>flat</code> の仕様：「モナドオブジェクト基底より下げて裸の値は返さない」という安全装置により、変化せずに、そのままのモナド値が返ってきたのです。</p>
+</div>
+<div class="paragraph">
+<p>言い換えると、<code>Array.flatMap</code> で単階層限定のモナドを扱いたい場合、意図的に <code>Array.map</code> とまったく同じ非モナド関数で <code>Array.map</code> と互換性のある運用は可能です。メソッドチェーンの組み換え等その他モナドのアドバンテージもそのまま残るはずですが、あくまで統一的なモナド関数によるモナドのコントロール、というパラダイムからは外れているので、そこは好みでしょう。</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_モナド関数を設計する">5.6. モナド関数を設計する</h3>
+<h3 id="monadfunction">5.6. モナド関数を設計する</h3>
 <div class="paragraph">
 <p>モナド関数は、モナドを返せばなんでも自由だという事が判明したので、モナド関数を自由に設計してみます。</p>
 </div>
@@ -2300,13 +2430,22 @@ console.log(array2);</code></pre>
 <p><code>oddFilter</code> というモナド関数が面白いのは、「空のモナド <code>[]</code> を返すこと」が「自分自身を削除する」という意味になっているところです。</p>
 </div>
 <div class="paragraph">
-<p>一般的にモナド関数 <code>a &#8658; []</code> は自分自身を削除するモナド関数で、データをクリアできます。</p>
+<p>一般的にリストモナド関数 <code>a &#8658; []</code> は自分自身を削除するモナド関数で、データをクリアできます。</p>
 </div>
 <div class="paragraph">
 <p>モナドが自分自身の構造をコントロールできる、という意味が実感できるでしょうか？</p>
 </div>
 <div class="paragraph">
 <p>普通の <code>Array.map</code> の配列操作では、仮にメソッドチェーンのタイプエラー問題を克服しながら関数化できたとしても、このような芸当は不可能です。</p>
+</div>
+<div class="paragraph">
+<p>モナドは、どういったタイプのモナドでも、こういった特異点というか、数字のゼロに対応するような特異なケースでかなりよく振る舞う性質を備えているようです。</p>
+</div>
+<div class="paragraph">
+<p>たとえば、エラーを特異な値として持ってみたり、また著者が最近書いたFRPオブジェクトをモナドになるように設計していると、値が <code>undefined</code> になればイベントを発生しない、というデザインに自然になったのは驚きました。</p>
+</div>
+<div class="paragraph">
+<p>人工的な仕様がオブジェクトの構造を要請するのではなくて、数学的な構造が自然と仕様を決めてしまう、というのは驚くべきことです。</p>
 </div>
 </td>
 </tr>
@@ -2388,9 +2527,12 @@ console.log(array4);</code></pre>
 <pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">[ 11, 13 ]</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>モナド関数の設計も合成もすべて、<code>Array.flatMap</code> メソッド1本で実現していることに注目してください。</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_まとめ_3">5.7. まとめ</h3>
+<h3 id="_まとめ_2">5.7. まとめ</h3>
 <div class="paragraph">
 <p>モナドは、<code>map</code> メソッドに <code>flat</code> メソッドを追加したオブジェクト。</p>
 </div>
@@ -2556,7 +2698,7 @@ plus(1)(2) //3</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_オブジェクト指向のメソッドでは">6.3. オブジェクト指向のメソッドでは</h3>
+<h3 id="withobjectmethod">6.3. オブジェクト指向のメソッドでは</h3>
 <div class="paragraph">
 <p>ここであえて復習するつもりもありませんが、オブジェクト指向のメソッドとは、オブジェクトに紐付いた関数のことですね。</p>
 </div>
@@ -2631,6 +2773,20 @@ plus(1)(2) //3</code></pre>
 </div>
 <div class="paragraph">
 <p>と、メソッドチェーンで自然に書けてしまう。</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>逆に言うと、endofunctorあるいはモナドのメソッドチェーンとは、代数の二項演算の連鎖をコード上に表現しているにすぎません。</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>オブジェクトにぶらさがるメソッドではない普通の関数の形式</p>
@@ -2707,7 +2863,7 @@ plus(1)(2) //3</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_まとめ_4">6.5. まとめ</h3>
+<h3 id="_まとめ_3">6.5. まとめ</h3>
 <div class="paragraph">
 <p>二項演算をベースに考える。</p>
 </div>
@@ -2842,7 +2998,7 @@ td>code {background-color: #aaaaaa};
 <p>モノイドは、理解するのが簡単、しかし奥が深く、モナドと同じかそれ以上に関数型プログラミングで応用局面もあり実用性が高いという、費用対効果（コスパ）抜群の品質の高いプログラミングの部品となりうるものです。</p>
 </div>
 <div class="paragraph">
-<p>だいたい、モナドを知りたいのなら、同時にモノイドを知っておくべきなのは当たり前のことなのですが、ここまでモナド偏重でモノイドについてはあまり語られないのは、<a href="#_モナドを理解するのが難しい理由">モナドを理解するのが難しい理由</a>の事情が原因です。</p>
+<p>だいたい、モナドを知りたいのなら、同時にモノイドを知っておくべきなのは当たり前のことなのですが、ここまでモナド偏重でモノイドについてはあまり語られないのは、<a href="#whysohard">モナドを理解するのが難しい理由</a>の事情が原因です。</p>
 </div>
 <div class="sect2">
 <h3 id="_単位元">7.1. 単位元</h3>
@@ -3244,7 +3400,7 @@ td>code {background-color: #aaaaaa};
 </div>
 </div>
 <div class="paragraph">
-<p>と<a href="#_オブジェクト指向のメソッドでは">オブジェクト指向のメソッドでは</a>メソッドチェーンとして表現できます。</p>
+<p>と<a href="#withobjectmethod">オブジェクト指向のメソッドでは</a>、メソッドチェーンとして表現できます。</p>
 </div>
 </div>
 <div class="sect2">
@@ -3373,7 +3529,7 @@ console.log(array1);</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_まとめ_5">7.5. まとめ</h3>
+<h3 id="_まとめ_4">7.5. まとめ</h3>
 <div class="paragraph">
 <p>モノイドは関数型プログラミングで役立つし、理解しておくのは重要。この章はただの紹介にすぎず、もっと充実すべく加筆が必要。</p>
 </div>
@@ -3492,7 +3648,7 @@ td>code {background-color: #aaaaaa};
 </div>
 </div>
 <div class="sect2">
-<h3 id="_モナドはモナド値とモナド関数の間の二項演算">8.2. モナドはモナド値とモナド関数の間の二項演算</h3>
+<h3 id="bicategory">8.2. モナドはモナド値とモナド関数の間の二項演算</h3>
 <div class="paragraph">
 <p><code>Array.flatMap</code> を二項演算とするArrayモナド（リストモナド）は、</p>
 </div>
@@ -3559,7 +3715,7 @@ td>code {background-color: #aaaaaa};
 <p>と二つの異なるタイプの間の二項演算です。</p>
 </div>
 <div class="paragraph">
-<p><a href="#.モナド(Monad)">[.モナド(Monad)]</a>で、</p>
+<p><a href="#whatsmonad">モナド(Monad)とは何か？</a>で、</p>
 </div>
 <div class="quoteblock">
 <blockquote>
@@ -3578,7 +3734,7 @@ td>code {background-color: #aaaaaa};
 <p>まあ、上記のとおり、モノイドは単一タイプの二項演算で、モナドは二つの異なるタイプの二項演算と根本的に異なるので、答えは<em>NO</em>のように思えますが、見方によっては<em>YES</em>・・・みたいなことにはならないでしょうか？</p>
 </div>
 <div class="paragraph">
-<p>そういえば、<a href="#.モナド(Monad)">[.モナド(Monad)]</a>の最後に、</p>
+<p>そういえば、<a href="#whatsmonad">モナド(Monad)とは何か？</a>の<a href="#conclusion">まとめ</a>に、</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -3593,7 +3749,7 @@ td>code {background-color: #aaaaaa};
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>ベースとして、オブジェクト自身を返す <code>.map</code> メソッドを持つendofunctorとしての特性をもつオブジェクトで、さらに以下の２つの関数（メソッド）が付いてる</p>
+<p>ベースとして、オブジェクト自身を返す <code>map</code> メソッドを持つendofunctorとしての特性をもつオブジェクトで、さらに以下の２つの関数（メソッド）がある</p>
 </li>
 <li>
 <p><code>unit</code></p>
@@ -3604,7 +3760,7 @@ td>code {background-color: #aaaaaa};
 </ol>
 </div>
 <div class="paragraph">
-<p>さらにまとめて、</p>
+<p>この３つ組（トリプル）</p>
 </div>
 <div class="stemblock">
 <div class="content">
@@ -3612,7 +3768,7 @@ td>code {background-color: #aaaaaa};
 </div>
 </div>
 <div class="paragraph">
-<p>の３つ組（トリプル）のことをモナドと呼びます。</p>
+<p>をモナドと呼びます。</p>
 </div>
 </td>
 </tr>
@@ -3774,7 +3930,7 @@ td>code {background-color: #aaaaaa};
 </div>
 </div>
 <div class="paragraph">
-<p>これが本当に成立していれば、<strong>flatMapの左右単位元</strong> が <code>unit</code> だと言えそうです。</p>
+<p>これが本当に成立していれば、<strong>flatMapの左右単位元</strong> は <code>unit</code> だと言えそうです。</p>
 </div>
 <div class="paragraph">
 <p>二項演算 <code>*</code> をまた <code>Array.flatMap</code> メソッドに戻して、具体的な値を決め打ちして挙動を検証してみます。</p>
@@ -3786,11 +3942,8 @@ td>code {background-color: #aaaaaa};
 </div>
 <div class="stemblock">
 <div class="content">
-\[f(a) = aの各要素を適当にモナドへマップする関数\]
+\[f(a) = 適当なモナド関数\]
 </div>
-</div>
-<div class="paragraph">
-<p><code>f</code> については、<a href="#_リストモナド(List Monad)のつかいかた">[_リストモナド(List Monad)のつかいかた]</a>を見返してください。</p>
 </div>
 <div class="listingblock">
 <div class="title">Array Monad 左右単位元</div>
@@ -3799,7 +3952,7 @@ td>code {background-color: #aaaaaa};
 
 const a = [1, 2];
 const f = a =&gt;
-          a.flatMap(a =&gt; [a * 10, a * 100]); <i class="conum" data-value="1"></i><b>(1)</b>
+          a.flatMap(a =&gt; [a, a * 5]); <i class="conum" data-value="1"></i><b>(1)</b>
 
 const left = unit(a).flatMap(f);    <i class="conum" data-value="2"></i><b>(2)</b>
 const center = f(a);                <i class="conum" data-value="3"></i><b>(3)</b>
@@ -3814,7 +3967,7 @@ console.log(right);</code></pre>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>aの各要素を適当にモナドへマップする関数</td>
+<td>適当なモナド関数　<a href="#monadfunction">モナド関数を設計する</a></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -3833,13 +3986,13 @@ console.log(right);</code></pre>
 <div class="listingblock">
 <div class="title">Console</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">[ 10, 100, 20, 200 ]
-[ 10, 100, 20, 200 ]
-[ 10, 100, 20, 200 ]</code></pre>
+<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">[ 1, 5, 2, 10 ]
+[ 1, 5, 2, 10 ]
+[ 1, 5, 2, 10 ]</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>本当に成立したので、<strong>flatMapの左右単位元</strong> が <code>unit</code> だと言えそうです。</p>
+<p>本当に成立したので、<strong>flatMapの左右単位元</strong> は <code>unit</code> だと言えそうです。</p>
 </div>
 </div>
 <div class="sect3">
@@ -3886,10 +4039,10 @@ console.log(right);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>というモナドの合成関数を用意していることに留意してください。</p>
+<p>と、モナド関数の合成をしていることに留意してください。</p>
 </div>
 <div class="paragraph">
-<p>合成関数 fg</p>
+<p>合成モナド関数 <code>fg</code></p>
 </div>
 <div class="stemblock">
 <div class="content">
@@ -3959,10 +4112,8 @@ console.log(right);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>というか、実はこれ <a href="#.モナド(Monad)">[.モナド(Monad)]</a>で、そもそもこういうメソッドチェーンの合成関数の切り出しへの、メソッドチェーンの再接続、ネスト化ってのができないと、関数型プログラミングでは大問題だ！という強い動機をもって、モナド導入した、という本稿の流れだったので、すでに検証は終わってた話なんですね。</p>
-</div>
-<div class="paragraph">
-<p>それは言い換えると、モノイドにもある結合法則のお話だったと。</p>
+<p>というか、実はこれ <a href="#howto">リストモナド(List Monad)のつかいかた</a>の<a href="#monadfunction">モナド関数を設計する</a>で、やっていたことの繰り返しで、とっくに検証は終わっています。
+<strong>モナドの結合法則とは、モナド関数の合成のこと</strong>だったんですね。</p>
 </div>
 </div>
 </div>
@@ -3981,7 +4132,7 @@ A monad is just a monoid in the category of endofunctors, what&#8217;s the probl
 </div>
 <div class="paragraph">
 <p><strong>「モナドっていうのは、ただ単に、自己関手(endofunctor)の圏の中におけるモノイドのことなんだよ、なにか問題でも？」</strong>
-などと時折言われるわけですが、モナドをモノイドとして捉え、<br>
+などと時折言われるわけですが、モナドをモノイドの性質を備える特殊なendofunctorであると捉え、<br>
 (オブジェクト、左右単位元、二項演算)の３つ組（トリプル）にしたもの</p>
 </div>
 <div class="stemblock">
@@ -4016,12 +4167,6 @@ A monad is just a monoid in the category of endofunctors, what&#8217;s the probl
 \[(endofunctor,unit,flatMap)\]
 </div>
 </div>
-<div class="paragraph">
-<p>筆者の感想。</p>
-</div>
-<div class="paragraph">
-<p><code>.map</code> と <code>.flat</code> 合成して <code>.flatMap</code> と単独の二項演算子としたことで、モノイドのパースペクティブが得られたのは良かったし、両トリプルの表記もよく整合している。</p>
-</div>
 </td>
 </tr>
 </table>
@@ -4030,22 +4175,19 @@ A monad is just a monoid in the category of endofunctors, what&#8217;s the probl
 <div class="sect2">
 <h3 id="_モナド則monad_laws">8.5. モナド則(Monad Laws)</h3>
 <div class="paragraph">
-<p>さらに推し進め、モノイドの用語をまるまる踏襲した上で法則として列挙したのがモナド則(Monad Laws)です。</p>
+<p>さらに推し進め、モノイド則の用語をまるまる踏襲した上でモナドの法則として列挙したのがモナド則(Monad Laws)です。</p>
 </div>
 <div class="paragraph">
 <p>すでに書いていますが、再掲すると、</p>
 </div>
-<div class="sect3">
-<h4 id="_左右の単位元_2">8.5.1. 左右の単位元</h4>
 <div class="stemblock">
+<div class="title">左右の単位元</div>
 <div class="content">
 \[unit(a)*f = f(a) = f(a)*unit\]
 </div>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_結合法則_2">8.5.2. 結合法則</h4>
 <div class="stemblock">
+<div class="title">結合法則</div>
 <div class="content">
 \[(a * f) * g = a * f * g = a * (a \Rightarrow a * f * g)\]
 </div>
@@ -4062,7 +4204,7 @@ A monad is just a monoid in the category of endofunctors, what&#8217;s the probl
 <td class="content">
 <div class="title">モナド則解読不能版</div>
 <div class="paragraph">
-<p>モナド則は、さらに天下り的に解読不能にするために、左単位元と右単位元にバラされた上で、右単位元の <code>f(a)</code> は 「どうせモナド値なのだから」と実用上の利点はあるにせよ、特に断りもなく単に <code>m</code> として簡約され、方程式の左右を入れ替えられたり、いろいろした結果、</p>
+<p>モナド則は、左単位元と右単位元にバラされた上で、右単位元の <code>f(a)</code> は 「どうせモナド値なのだから」と実用上の利点はあるにせよ、特に断りもなく単に <code>m</code> として簡約され、方程式の左右を入れ替えられたり、いろいろした結果、</p>
 </div>
 <div class="ulist">
 <ul>
@@ -4081,10 +4223,10 @@ A monad is just a monoid in the category of endofunctors, what&#8217;s the probl
 <p>という感じでエンドユーザに提供されることが多いようです。</p>
 </div>
 <div class="paragraph">
-<p>とりあえず、モノイドのことを知らない人、知っててもモナドとの関連がわからない人には、特に上のように変形されて対称性がわかりにくい左右の単位元とか解読不能でしょう。</p>
+<p>とりあえず、モノイドのことを知らない人、知っててもモナドとの関連がわからない人には、特に上のように式変形された結果、対称性も読み取りにくい左右の単位元とか解読不能でしょう。</p>
 </div>
 <div class="paragraph">
-<p>あとHaskell特有の二項演算子の記号と、Syntaxで表記されることが多いので、HaskellのSyntaxがわからない人はお手上げです。</p>
+<p>あとモナドがプログラミングに導入された例の歴史的経緯により、Haskell特有の二項演算子の表記と、Syntaxで提示されることが多いので、HaskellのSyntaxがわからない人はお手上げとなる可能性が高いです。</p>
 </div>
 </td>
 </tr>
@@ -4102,12 +4244,11 @@ const right = f(a).flatMap(unit);</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>となりますが、これは <code>Array.flatMap</code> に限った構造ではなく、他のモナド実装でも同じ様相になります。もちろん、<code>unit</code> <code>flatMap</code> などの名前は実装者の好み、さじ加減１つなので、ケースバイケースです。</p>
-</div>
+<p>となりますが、これは <code>Array.flatMap</code> に限った構造ではなく、他のモナド実装でも同じ様相になります。もちろん、<code>unit</code> <code>flatMap</code> などの関数名は実装者の好み、さじ加減１つなので、ケースバイケースです。</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_まとめ_6">8.6. まとめ</h3>
+<h3 id="_まとめ_5">8.6. まとめ</h3>
 <div class="paragraph">
 <p>モナドを知るときは、同時にモノイドのことも知っておこう。</p>
 </div>
@@ -4133,7 +4274,7 @@ td>code {background-color: #aaaaaa};
 <p>Promiseは事前想定の多すぎるAPIで使いにくいと思うのですが、事前想定が多い１つの弊害として、構造が限定されてしまっている、ということがあります。</p>
 </div>
 <div class="paragraph">
-<p>Promiseで　<code>unit</code> に相当するのは、<code>Promise.of</code> ですが、<a href="https://stackoverflow.com/questions/45210122/why-cant-promise-resolve-be-called-as-a-function/45210249">そのまま置き換えることは出来ない</a>ようなので、  <code>Promise.resolve.bind(Promise)</code> として、</p>
+<p>Promiseで <code>unit</code> に相当するのは、<code>Promise.of</code> ですが、<a href="https://stackoverflow.com/questions/45210122/why-cant-promise-resolve-be-called-as-a-function/45210249">そのまま置き換えることは出来ない</a>ようなので、  <code>Promise.resolve.bind(Promise)</code> として、</p>
 </div>
 <div class="listingblock">
 <div class="title">Promise 構造テスト</div>
@@ -4172,6 +4313,9 @@ console.log(ppp);</code></pre>
 Promise { 3 }
 Promise { 3 }</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>おっと、全部同じ値になってしまいました。</p>
 </div>
 <div class="paragraph">
 <p>Promiseは、ネストしたPromiseオブジェクトを許容しておらず、ぜんぶ平坦化してしまうようです。</p>
@@ -4240,7 +4384,7 @@ Hello</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>自由に階層と構造を指定できるので、ここであえてモナド則を持ち出すまでもなく、Promiseがモナドではない、というのは明らかです。</p>
+<p>自由に階層と構造を指定できる（それか数や文字列のようにそもそも階層が存在しない）ので、ここであえてモナド則を持ち出すまでもなく、Promiseがモナドではない、というのは明らかです。</p>
 </div>
 <div class="paragraph">
 <p>ネストできるだろうと想定してPromise自身を受け渡す <code>Promise.then</code> メソッドを無理やり組むと、それ以前に即座に <code>flat</code> かまされているわけですから、タイプエラーが出るでしょう。モナド則（モノイド則）で言うと、Promiseオブジェクトをモナド値としたときの結合法則が成り立ちません。</p>
@@ -4249,17 +4393,34 @@ Hello</code></pre>
 <p>Promiseがネスト構造の操作を許容しない、ということで得られるメリットとは？ちょっと思いつかないですね。</p>
 </div>
 <div class="sect2">
-<h3 id="_まとめ_7">9.1. まとめ</h3>
+<h3 id="_まとめ_6">9.1. まとめ</h3>
 <div class="paragraph">
 <p>自由に内部構造（ネスト構造）を持てないオブジェクトはモナドではない。ただし、数字、文字列などは最初から自身でネストしてるような構造(JavaScriptのPrimitive)は除く。それ以外にもさらに何か特別な例外がある可能性までは厳密に検証はしていないが、少なくともPromiseがモナドでないことは明らか。</p>
 </div>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_ミュータブルな状態ioそしてモナド">10. ミュータブルな状態、IO、そしてモナド</h2>
+<div class="sectionbody">
+<style type="text/css">
+p>code {background-color: #aaaaaa};
+
+th,td {
+    border: solid 1px;
+}
+td>code {background-color: #aaaaaa};
+}
+</style>
+<div class="paragraph">
+<p>これについては、一大別テーマなので、「後編」として別に書きます。長いし。</p>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-07 06:37:33 JST
+Last updated 2018-12-07 13:02:15 JST
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css">

@@ -22,7 +22,7 @@ ES6+ Promiseがモナドだ、としばしば言われますが、モナドで�
 
 Promiseは事前想定の多すぎるAPIで使いにくいと思うのですが、事前想定が多い１つの弊害として、構造が限定されてしまっている、ということがあります。
 
-Promiseで　`unit` に相当するのは、`Promise.of` ですが、link:https://stackoverflow.com/questions/45210122/why-cant-promise-resolve-be-called-as-a-function/45210249[そのまま置き換えることは出来ない]ようなので、  `Promise.resolve.bind(Promise)` として、
+Promiseで `unit` に相当するのは、`Promise.of` ですが、link:https://stackoverflow.com/questions/45210122/why-cant-promise-resolve-be-called-as-a-function/45210249[そのまま置き換えることは出来ない]ようなので、  `Promise.resolve.bind(Promise)` として、
 
 
 
@@ -52,6 +52,8 @@ Promise { 3 }
 Promise { 3 }
 Promise { 3 }
 ----
+
+おっと、全部同じ値になってしまいました。
 
 Promiseは、ネストしたPromiseオブジェクトを許容しておらず、ぜんぶ平坦化してしまうようです。
 
@@ -105,7 +107,7 @@ Hello
 
 image::./unitflat5.svg[align="center"]
 
-自由に階層と構造を指定できるので、ここであえてモナド則を持ち出すまでもなく、Promiseがモナドではない、というのは明らかです。
+自由に階層と構造を指定できる（それか数や文字列のようにそもそも階層が存在しない）ので、ここであえてモナド則を持ち出すまでもなく、Promiseがモナドではない、というのは明らかです。
 
 ネストできるだろうと想定してPromise自身を受け渡す `Promise.then` メソッドを無理やり組むと、それ以前に即座に `flat` かまされているわけですから、タイプエラーが出るでしょう。モナド則（モノイド則）で言うと、Promiseオブジェクトをモナド値としたときの結合法則が成り立ちません。
 

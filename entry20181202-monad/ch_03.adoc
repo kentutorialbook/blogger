@@ -26,7 +26,8 @@ JavaScript上でかなり実用的だから。
 - 値
 - 値でもある関数
 
-の組み合わせ（function composition）で制御します。（この２つの組み合わせについては後で詳しく説明します。）
+の組み合わせ（function composition）で制御します。
+<<ch_06#relation>> 以降で詳しく解説します。
 
 == jQuery
 
