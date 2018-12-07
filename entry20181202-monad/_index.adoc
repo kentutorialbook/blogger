@@ -4,7 +4,7 @@ Ken Okabe <kentutorialbook@gmail.com>
 :description: timeline FRP Monad
 :homepage:    https://kenokabe.github.io/timeline-monad/
 :source:      https://github.com/kenokabe/timeline-monad
-:toc: left
+:toc:
 :sectnums:
 :toclevels: 2
 :source-highlighter: highlightjs

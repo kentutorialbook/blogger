@@ -434,14 +434,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="article toc2 toc-left">
+<body class="article">
 <div id="header">
 <h1>30分でわかるJavaScriptプログラマのためのモナド入門</h1>
 <div class="details">
 <span id="author" class="author">Ken Okabe</span><br>
 <span id="email" class="email"><a href="mailto:kentutorialbook@gmail.com">kentutorialbook@gmail.com</a></span><br>
 </div>
-<div id="toc" class="toc2">
+<div id="toc" class="toc">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_モナドが難しい">1. モナドが難しい？</a>
@@ -1432,7 +1432,7 @@ console.log(
 </ol>
 </div>
 <div class="paragraph">
-<p>この3点セットで <code>Array</code> は、Arrayモナド(Monad)になります。</p>
+<p>この <strong>3点全部そろったら</strong> <code>Array</code> は、Arrayモナド(Monad)になります。</p>
 </div>
 <div class="paragraph">
 <p>念の為に読者へ保証しておきますが、これは、圏論でちゃんと定義づけされているモナド(Monad)のことです。プログラミングのモナドで定義が異なる、という例のトリッキーなアレではありません。</p>
@@ -1444,12 +1444,9 @@ console.log(
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
+<div class="title">圏論(category theory)用語の紹介</div>
 <div class="paragraph">
-<p>一応裏を取ってみせる必要はあると思うので、とりあえず、英語版Wikipediaの
-<a href="https://en.wikipedia.org/wiki/Monad_(category_theory)">Monad (category theory)</a>と、Wikipediaは信頼性がちょっと・・・と言う人も必ずいるので、Web上の圏論の情報では一番豊富で信頼性が高いと思われる<a href="https://ncatlab.org/nlab/show/HomePage">nLab</a>を参照します。</p>
-</div>
-<div class="paragraph">
-<p>どうせnLabと重複するので、英語版Wikipediaは冒頭だけ。</p>
+<p>英語版Wikipediaなどでは、</p>
 </div>
 <div class="paragraph">
 <div class="title">Monad (category theory)</div>
@@ -1464,80 +1461,97 @@ console.log(
 </div>
 <hr>
 <div class="paragraph">
-<p>圏論(category theory)では、モナド(monad)とは、endofunctor(カテゴリを自身に転写するfunctor)で、2つの自然変換(natural transformations)を伴っている。</p>
+<p>圏論(category theory)では、モナド(monad)とは、自己関手(endofunctor=カテゴリを自身に転写するfunctor)で、2つの自然変換(natural transformations)を伴っている。</p>
 </div>
 <hr>
 <div class="paragraph">
-<p>endofunctor(カテゴリを自身に転写( <code>.map</code> )するfunctor)のことは良いでしょう。それが伴っている、2つの自然変換(natural transformations)というのは、<code>unit</code> と <code>flat</code> のことです。</p>
+<p>などと書かれていますが、圏論用語@日本語では、</p>
 </div>
 <div class="paragraph">
-<div class="title">monad#definition</div>
-<p><a href="https://ncatlab.org/nlab/show/monad#definition" class="bare">https://ncatlab.org/nlab/show/monad#definition</a></p>
-</div>
-<div class="paragraph">
-<p>Monads</p>
-</div>
-<div class="paragraph">
-<p>A monad in a bicategory K is given by</p>
+<p>\(C\) 上のモナドとは、</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>an object, together with</p>
+<p>自己函手 \(T: C \rightarrow C\)</p>
 </li>
 <li>
-<p>an endomorphism t:a→a, and</p>
+<p>自然変換 \(\eta: Id_C \Rightarrow T\)</p>
 </li>
 <li>
-<p>2-cells η:1a→t (the unit of t) and μ:t∘t→t (the multiplication)</p>
+<p>自然変換 \(\mu: T \circ T \Rightarrow T\)</p>
 </li>
 </ul>
 </div>
-<hr>
 <div class="paragraph">
-<p>A monad in a bicategory K というのは、とりあえず置いときましょう。<a href="#bicategory">モナドはモナド値とモナド関数の間の二項演算</a></p>
+<p>からなる3つ組 \(\langle T, \eta, \mu \rangle\)</p>
+</div>
+<div class="paragraph">
+<p>などと表記されることが多いです。</p>
+</div>
+<div class="paragraph">
+<p>逐一、英語 category theroryのことを圏論、endofunctorのことを自己関手、natural transformationを自然変換と和訳してしまった結果、原語以上に難解さを醸し出す効果を持っており、なおかつギリシャ文字が出てきておっと思うわけですが、どう表記されようが、<code>Array</code> モナドについて言えば、</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>an object, together with</p>
+<p>自己関手(endofunctor)は、皆よく知ってる 自分自身(オブジェクト)を返してくる <code>Array.map</code> メソッドをもつ <code>Array</code> オブジェクトのこと</p>
 </li>
-</ul>
-</div>
-<div class="paragraph">
-<p>今のケースで言えば <code>Array</code> オブジェクト<br>
-(以下の表記では <code>t</code> と対応している)、 それが以下の性質を伴う</p>
-</div>
-<div class="ulist">
-<ul>
 <li>
-<p>an endomorphism <code>t</code> :a→a, and</p>
+<p>\(\eta\)（イータと読む）は、<code>↑</code> に似ていて、 <code>Array</code> を返す <code>unit</code> のこと</p>
 </li>
-</ul>
-</div>
-<div class="paragraph">
-<p>endomorphism  - オブジェクト <code>t</code> 自身 を返すメソッド <code>.map</code> がある</p>
-</div>
-<div class="ulist">
-<ul>
 <li>
-<p>2-cells η:1a→ <code>t</code> (the <code>unit</code> of <code>t</code> ) and μ: <code>t</code> ∘ <code>t</code> → <code>t</code>  (the multiplication)</p>
+<p>\(\mu\)(ミューと読む)は、<code>↓</code>　に似ていて、 <code>Array</code> を返す  <code>flat</code> のこと</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>2つのcells(=morphism)がある、</p>
+<p>に過ぎないし、それを念頭に式を眺めれば、この\(T\)ってのは <code>Array</code> に対応していて、各関数との関係性が正確に記述されてるなあ、と普通にとわかるはずです。たしかに、</p>
 </div>
 <div class="paragraph">
-<p>\(η:\) 1a→ <code>t</code><br>
-一つ階層を上げて <code>t</code> を返す <code>unit</code> のこと</p>
+<p>\(C\) 上のモナドとは、とか言ってて、</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[T: C \rightarrow C\]
+</div>
 </div>
 <div class="paragraph">
-<p>\(μ:\) <code>t</code> ∘ <code>t</code> → <code>t</code><br>
-<code>t</code> が二重にネストしてたら 一つ階層を下げて <code>t</code> にして返す <code>flat</code> のこと</p>
+<p>と \(T\) (  <code>Array.map</code> つきの <code>Array</code> ) が定義されているのが、気になりますが、この \(C\) は、Category(圏)の頭文字で、ざっくり領域の限定をしています。</p>
 </div>
 <div class="paragraph">
-<p><code>flat</code> は、\(TTX \rightarrow TX\) などと表記されることが多いので、ああ <code>flat</code> のことを言ってるんだなあ、と思っておけばいいです。\(TX \rightarrow X\) ではない理由は、<code>flat</code> の仕様で、例の、\(T\) （endofunctorオブジェクト）でネストしていたときのみ１階層下げる、ネストしてなかったらエコからはみ出てTypeErrorを食らうような裸の値:Xが出ないという条件分岐のことを言っているからです。</p>
+<p>ここでなんの領域を限定しているのか？というと、今定義してるモナドの範囲限定していて、今の <code>Arrayモナド</code> が乗っかってる \(C\)の範囲とは、<strong>「JavaScriptの値の全体」</strong> ということに他なりません。だから、<strong> \(C\)は、JavaScript Category(圏)</strong>とでもなんとでも言えば良いんじゃないでしょうか？</p>
+</div>
+<div class="paragraph">
+<p><strong>「JavaScriptの値の全体」</strong>とはもっと正確にいうと、<code>1</code> やら <code>"Hello"</code> などのすべてのPrimitiveValueさらに、<code>Object.prototype</code> から派生するすべてのオブジェクトのことで、これにたしかに今定義している <code>Array</code> オブジェクトのモナドも乗っかってますよね？</p>
+</div>
+<div class="paragraph">
+<p><code>Array</code> モナドはendofunctorである \(T\)で、<code>Array.map</code> メソッドにより、\(C \rightarrow C\)と任意のJavaScriptの値を別のJavaScriptの値へマップします。</p>
+</div>
+<div class="paragraph">
+<p>次に　<code>unit</code> ですが、</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\eta: Id_C \Rightarrow T\]
+</div>
+</div>
+<div class="paragraph">
+<p>\(C\)上にあるなんかの値（裸の値、それからArray自身も含む）を、\(T\)( <code>Array</code> )に上げて返すという <code>unit</code> の定義になっている。</p>
+</div>
+<div class="paragraph">
+<p>最後に、<code>flat</code> ですが、</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\mu: T \circ T \Rightarrow T\]
+</div>
+</div>
+<div class="paragraph">
+<p>\(T\)がもし二重にネストしてたら 一つ階層を下げて \(T\) にして返すという、条件分岐つきの性質を端的に定義しています。</p>
+</div>
+<div class="paragraph">
+<p><code>flat</code>  (\(\mu\))は、\(TTX \rightarrow TX\) などと表記されることも多く、いちいち各流派の方言につきあうのは大変なんですが、ああ <code>flat</code> のことを言ってるんだなあ、と思っておけばいいです。</p>
 </div>
 </td>
 </tr>
@@ -4423,7 +4437,7 @@ td>code {background-color: #aaaaaa};
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-07 14:05:13 JST
+Last updated 2018-12-08 04:10:38 JST
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css">
