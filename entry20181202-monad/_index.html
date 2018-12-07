@@ -2442,10 +2442,13 @@ console.log(array2);</code></pre>
 <p>モナドは、どういったタイプのモナドでも、こういった特異点というか、数字のゼロに対応するような特異なケースでかなりよく振る舞う性質を備えているようです。</p>
 </div>
 <div class="paragraph">
-<p>たとえば、エラーを特異な値として持ってみたり、また著者が最近書いたFRPオブジェクトをモナドになるように設計していると、値が <code>undefined</code> になればイベントを発生しない、というデザインに自然になったのは驚きました。</p>
+<p>たとえば、エラーを特異な値として持つと大きなメリットがあるなど。</p>
 </div>
 <div class="paragraph">
-<p>人工的な仕様がオブジェクトの構造を要請するのではなくて、数学的な構造が自然と仕様を決めてしまう、というのは驚くべきことです。</p>
+<p>Javaで悪名高い頻発するnull pointer exceptionは、このような値がないときの振る舞いを設計の段階で上手く規定できていないことが根本的原因ですが、モナドを積極的に取り入れることで問題の多くは解決するんじゃないでしょうか？</p>
+</div>
+<div class="paragraph">
+<p>また著者が最近書いたFRPオブジェクトをモナドになるように設計していると、値が <code>undefined</code> になればイベントを発生しない、というデザインに自然になってしまいました。人工的な仕様がオブジェクトの構造を要請するのではなくて、数学的な構造が自然と仕様を要請してしまう、というのは驚くべきことです。</p>
 </div>
 </td>
 </tr>
@@ -4420,7 +4423,7 @@ td>code {background-color: #aaaaaa};
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-12-07 13:02:15 JST
+Last updated 2018-12-07 13:20:38 JST
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css">
