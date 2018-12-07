@@ -442,16 +442,14 @@ Arrayが自身の構造にアプローチできるモナドになった結果、
 2. 1階層上げる `unit` 
 3. (もしネストしていたら)1階層下げる `Array.flat` 
 
-この3点セットで `Array` は、Arrayモナド(Monad)になります。
+この **3点全部そろったら** `Array` は、Arrayモナド(Monad)になります。
 
 念の為に読者へ保証しておきますが、これは、圏論でちゃんと定義づけされているモナド(Monad)のことです。プログラミングのモナドで定義が異なる、という例のトリッキーなアレではありません。
 
 [NOTE]
+.圏論(category theory)用語の紹介
 ====
-一応裏を取ってみせる必要はあると思うので、とりあえず、英語版Wikipediaの
-https://en.wikipedia.org/wiki/Monad_(category_theory)[Monad (category theory)]と、Wikipediaは信頼性がちょっと・・・と言う人も必ずいるので、Web上の圏論の情報では一番豊富で信頼性が高いと思われるlink:https://ncatlab.org/nlab/show/HomePage[nLab]を参照します。
-
-どうせnLabと重複するので、英語版Wikipediaは冒頭だけ。
+英語版Wikipediaなどでは、
 
 .Monad (category theory)
  
@@ -461,53 +459,69 @@ https://en.wikipedia.org/wiki/Monad_(category_theory)
 
 ---
 
-圏論(category theory)では、モナド(monad)とは、endofunctor(カテゴリを自身に転写するfunctor)で、2つの自然変換(natural transformations)を伴っている。
+圏論(category theory)では、モナド(monad)とは、自己関手(endofunctor=カテゴリを自身に転写するfunctor)で、2つの自然変換(natural transformations)を伴っている。
 
 ---
 
-endofunctor(カテゴリを自身に転写( `.map` )するfunctor)のことは良いでしょう。それが伴っている、2つの自然変換(natural transformations)というのは、`unit` と `flat` のことです。
+などと書かれていますが、圏論用語@日本語では、
+
+stem:[C] 上のモナドとは、
+
+- 自己函手 stem:[T: C \rightarrow C]
+- 自然変換 stem:[\eta: Id_C \Rightarrow T]
+- 自然変換 stem:[\mu: T \circ T \Rightarrow T]
+
+からなる3つ組 stem:[\langle T, \eta, \mu \rangle]
+
+などと表記されることが多いです。
+
+逐一、英語 category theroryのことを圏論、endofunctorのことを自己関手、natural transformationを自然変換と和訳してしまった結果、原語以上に難解さを醸し出す効果を持っており、なおかつギリシャ文字が出てきておっと思うわけですが、どう表記されようが、`Array` モナドについて言えば、
+
+- 自己関手(endofunctor)は、皆よく知ってる 自分自身(オブジェクト)を返してくる `Array.map` メソッドをもつ `Array` オブジェクトのこと
+
+- stem:[\eta]（イータと読む）は、`↑` に似ていて、 `Array` を返す `unit` のこと
+
+- stem:[\mu](ミューと読む)は、`↓`　に似ていて、 `Array` を返す  `flat` のこと
+
+に過ぎないし、それを念頭に式を眺めれば、このstem:[T]ってのは `Array` に対応していて、各関数との関係性が正確に記述されてるなあ、と普通にとわかるはずです。たしかに、
+
+stem:[C] 上のモナドとは、とか言ってて、
+
+[stem]
+++++
+T: C \rightarrow C
+++++
 
 
- 
-.monad#definition
+と stem:[T] (  `Array.map` つきの `Array` ) が定義されているのが、気になりますが、この stem:[C] は、Category(圏)の頭文字で、ざっくり領域の限定をしています。
+
+ここでなんの領域を限定しているのか？というと、今定義してるモナドの範囲限定していて、今の `Arrayモナド` が乗っかってる stem:[C]の範囲とは、**「JavaScriptの値の全体」** ということに他なりません。だから、** stem:[C]は、JavaScript Category(圏)**とでもなんとでも言えば良いんじゃないでしょうか？
+
+**「JavaScriptの値の全体」**とはもっと正確にいうと、`1` やら `"Hello"` などのすべてのPrimitiveValueさらに、`Object.prototype` から派生するすべてのオブジェクトのことで、これにたしかに今定義している `Array` オブジェクトのモナドも乗っかってますよね？
+
+`Array` モナドはendofunctorである stem:[T]で、`Array.map` メソッドにより、stem:[C \rightarrow C]と任意のJavaScriptの値を別のJavaScriptの値へマップします。
+
+次に　`unit` ですが、
+
+[stem]
+++++
+\eta: Id_C \Rightarrow T
+++++
+
+stem:[C]上にあるなんかの値（裸の値、それからArray自身も含む）を、stem:[T]( `Array` )に上げて返すという `unit` の定義になっている。
 
 
-https://ncatlab.org/nlab/show/monad#definition
+最後に、`flat` ですが、
 
-Monads
+[stem]
+++++
+\mu: T \circ T \Rightarrow T
+++++
 
-A monad in a bicategory K is given by
+stem:[T]がもし二重にネストしてたら 一つ階層を下げて stem:[T] にして返すという、条件分岐つきの性質を端的に定義しています。
 
-* an object, together with
+`flat`  (stem:[\mu])は、stem:[TTX \rightarrow TX] などと表記されることも多く、いちいち各流派の方言につきあうのは大変なんですが、ああ `flat` のことを言ってるんだなあ、と思っておけばいいです。
 
-* an endomorphism t:a→a, and
-
-*  2-cells η:1a→t (the unit of t) and μ:t∘t→t (the multiplication)
-
----
-
-A monad in a bicategory K というのは、とりあえず置いときましょう。<<ch_08#bicategory>>
-
-* an object, together with
-
-今のケースで言えば `Array` オブジェクト + 
-(以下の表記では `t` と対応している)、 それが以下の性質を伴う 
-
-* an endomorphism `t` :a→a, and
-
-endomorphism  - オブジェクト `t` 自身 を返すメソッド `.map` がある
-
-*  2-cells η:1a→ `t` (the `unit` of `t` ) and μ: `t` ∘ `t` → `t`  (the multiplication)
-
-2つのcells(=morphism)がある、 
-
-stem:[η:] 1a→ `t` + 
-一つ階層を上げて `t` を返す `unit` のこと
-
-stem:[μ:] `t` ∘ `t` → `t` + 
-`t` が二重にネストしてたら 一つ階層を下げて `t` にして返す `flat` のこと
-
-`flat` は、stem:[TTX \rightarrow TX] などと表記されることが多いので、ああ `flat` のことを言ってるんだなあ、と思っておけばいいです。stem:[TX \rightarrow X] ではない理由は、`flat` の仕様で、例の、stem:[T] （endofunctorオブジェクト）でネストしていたときのみ１階層下げる、ネストしてなかったらエコからはみ出てTypeErrorを食らうような裸の値:Xが出ないという条件分岐のことを言っているからです。
 
 ====
 
