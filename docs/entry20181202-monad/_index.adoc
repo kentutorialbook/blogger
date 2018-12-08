@@ -9,7 +9,7 @@
 :toclevels: 2
 :source-highlighter: highlightjs
 :highlightjs-theme: solarized-dark
-:imagesdir: ./img/
+:imagesdir: https://kentutorialbook.github.io/blogger/entry20181202-monad/img/
 :stem: latexmath
  
 ++++
