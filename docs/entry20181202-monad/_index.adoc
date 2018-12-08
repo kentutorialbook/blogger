@@ -1,5 +1,5 @@
 = 30分でわかるJavaScriptプログラマのためのモナド入門
-Ken Okabe <kentutorialbook@gmail.com>
+岡部　健 / Ken Okabe <kentutorialbook@gmail.com>
 :keywords:  monad, JavaScript, ECMAScript, Promise, FRP, timeline
 :description: timeline FRP Monad
 :homepage:    https://kenokabe.github.io/timeline-monad/
@@ -9,7 +9,7 @@ Ken Okabe <kentutorialbook@gmail.com>
 :toclevels: 2
 :source-highlighter: highlightjs
 :highlightjs-theme: solarized-dark
-:imagesdir: ./img/ 
+:imagesdir: ./img/
 :stem: latexmath
  
 ++++

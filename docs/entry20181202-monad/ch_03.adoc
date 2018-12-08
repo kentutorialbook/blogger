@@ -10,7 +10,7 @@ ifndef::highlightjs-theme:[:highlightjs-theme: solarized-dark]
 p>code {background-color: #aaaaaa};
 
 th,td {
-    border: solid 1px;  
+    border: solid 0px;  
 }　
 td>code {background-color: #aaaaaa};
 } 
