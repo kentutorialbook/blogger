@@ -31,55 +31,7 @@ img {
    max-width: 100%;  /* 横幅に合わせて自動縮小するが、拡大はしない */
 }
 .center {margin: 0 auto; text-align: center;}
-         .markdown  { width:100%; display:none;  }
-
-
-table{
-      border:solid 2px #ccc;
-      border-collapse:collapse;
-}
-table td,
-table th{
-      border:solid 1px #ccc;
-}
-
-table{
-      border:solid 2px #ccc;
-      border-collapse:collapse;
-}
-table td,
-table th{
-      border:solid 1px #ccc;
-}
-
-img{max-width: 100%;}
-
-code {
-  border-radius: 2px;
-  display: inline-block;
-  border: 1px solid #d3d6db;
-  background-color: #f9f9f9;
-  padding: 1px 5px;
-  margin: 3px;
-}
-blockquote {
-  background: #f9f9f9;
-  border-left: 10px solid #ccc;
-  margin: 1.5em 10px;
-  padding: 0.5em 10px;
-  quotes: "\201C""\201D""\2018""\2019";
-}
-blockquote:before {
-  color: #ccc;
-  content: open-quote;
-  font-size: 4em;
-  line-height: 0.1em;
-  margin-right: 0.25em;
-  vertical-align: -0.4em;
-}
-blockquote p {
-  display: inline;
-}]]></b:skin>
+         ]]></b:skin>
   
 
 
@@ -91,8 +43,8 @@ blockquote p {
         <div class='col-xl-1 col-xs-0'/>
         <div class='col-xl-11 col-xs-12'>
     <div class='blog-header'>
-      <a href='https://kenokabetech.blogspot.com/'>
-<img src='https://kenokabetech.github.io/img/timeline-logolog.png'/></a>
+      <a href='https://kentechdoc.blogspot.com/'>
+<img src='https://kentutorialbook.github.io/blogger/timeline-logo.png'/></a>
     </div> 
        </div>  
        </div>
@@ -918,9 +870,9 @@ blockquote p {
                 <div class='col-xl-3 col-xs-12 blog-sidebar'>
                   <div class='sidebar-module sidebar-module-inset'>
                     <b:section class='other' id='other' showaddelement='yes'>
-                      <b:widget id='HTML1' locked='false' title='Sponsored Link' type='HTML'>
+                      <b:widget id='HTML1' locked='false' title='' type='HTML'>
                         <b:widget-settings>
-                          <b:widget-setting name='content'><![CDATA[<script type="text/javascript">rakuten_design="slide";rakuten_affiliateId="171014fa.bdee2e0b.171014fb.333f5d85";rakuten_items="ctsmatch";rakuten_genreId="0";rakuten_size="200x200";rakuten_target="_blank";rakuten_theme="gray";rakuten_border="off";rakuten_auto_mode="on";rakuten_genre_title="off";rakuten_recommend="on";rakuten_ts="1536986476877";</script><script type="text/javascript" src="https://xml.affiliate.rakuten.co.jp/widget/js/rakuten_widget.js"></script>]]></b:widget-setting>
+                          <b:widget-setting name='content'><![CDATA[<iframe src="https://rcm-fe.amazon-adsystem.com/e/cm?o=9&p=11&l=ez&f=ifr&linkID=a82dbd44f331817a30366e3a9b9d8cd0&t=tedlearner-22&tracking_id=tedlearner-22" width="120" height="600" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>]]></b:widget-setting>
                         </b:widget-settings>
                         <b:includable id='main'>
   <!-- only display title if it's non-empty -->
@@ -1083,6 +1035,53 @@ blockquote p {
                                   <b:include name='quickedit'/>
                                 </div>
                               </b:includable>
+                      </b:widget>
+                      <b:widget id='Profile1' locked='false' title='About me' type='Profile'>
+                        <b:widget-settings>
+                          <b:widget-setting name='showaboutme'>true</b:widget-setting>
+                          <b:widget-setting name='showlocation'>false</b:widget-setting>
+                        </b:widget-settings>
+                        <b:includable id='main'>
+    <b:if cond='data:title != &quot;&quot;'>
+      <h2><data:title/></h2>
+    </b:if>
+    <div class='widget-content'>
+    <b:if cond='data:team'> <!-- team blog profile -->
+      <ul>
+        <b:loop values='data:authors' var='i'>
+          <li><a class='profile-name-link g-profile' expr:href='data:i.userUrl' expr:style='&quot;background-image: url(&quot; + data:i.profileLogo + &quot;);&quot;'><data:i.display-name/></a></li>
+        </b:loop>
+      </ul>
+
+    <b:else/> <!-- normal blog profile -->
+
+      <b:if cond='data:photo.url != &quot;&quot;'>
+        <a expr:href='data:userUrl'><img class='profile-img' expr:alt='data:messages.myPhoto' expr:height='data:photo.height' expr:src='data:photo.url' expr:width='data:photo.width'/></a>
+      </b:if>
+
+      <dl class='profile-datablock'>
+        <dt class='profile-data'>
+          <a class='profile-name-link g-profile' expr:href='data:userUrl' expr:style='&quot;background-image: url(&quot; + data:profileLogo + &quot;);&quot;' rel='author'>
+            <data:displayname/>
+          </a>
+          <b:if cond='data:hasgoogleprofile'>
+            <br/>
+            <div class='g-follow' data-annotation='bubble' data-height='20' expr:data-href='data:userUrl'/>
+          </b:if>
+        </dt>
+
+        <b:if cond='data:showlocation'>
+          <dd class='profile-data'><data:location/></dd>
+        </b:if>
+
+        <b:if cond='data:aboutme != &quot;&quot;'><dd class='profile-textblock'><data:aboutme/></dd></b:if>
+      </dl>
+      <a class='profile-link' expr:href='data:userUrl' rel='author'><data:viewProfileMsg/></a>
+    </b:if>
+
+     <b:include name='quickedit'/>
+    </div>
+  </b:includable>
                       </b:widget>
                       <b:widget id='ContactForm1' locked='false' title='Contact' type='ContactForm' version='1'>
                         <b:includable id='main'>

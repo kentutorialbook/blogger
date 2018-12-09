@@ -303,14 +303,14 @@ USBデバイス + USBデバイス = USBデバイス
 
 [stem]
 ++++
-1 + 2 + 3
+1 + 2 + 3 = 6
 ++++
 
 という二項演算の連続的操作は、そのまま、
 
 [stem]
 ++++
-(1).plus(2).plus(3)
+(1).plus(2).plus(3) = 6
 ++++
 
 と<<ch_06.adoc#withobjectmethod>>、メソッドチェーンとして表現できます。
@@ -328,7 +328,7 @@ Array（リスト・配列）は、モノイドです。
 === Array.concat メソッドという二項演算
 [stem]
 ++++
-[1,2].concat([3]).concat([4,5])
+[1,2].concat([3]).concat([4,5]) = [1,2,3,4,5]
 ++++
 
 .https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Array/concat[Array.concat]
