@@ -1,0 +1,11 @@
+= 『30分でわかるJavaScriptプログラマのためのモナド入門』をWeb本にしてみました。
+
+前エントリの『link:https://kentechdoc.blogspot.com/2018/12/30javascript_4.html[30分でわかるJavaScriptプログラマのためのモナド入門]』をWeb本にしてみました。(というより、最初からその想定で作成していました。)
+
+内容はまったく同じで、PCブラウザでは目次が横にレイアウトされているだけの違いです。その分読みやすいと思います。
+
+こちらからどうぞ。
+
+=== 30分でわかるJavaScriptプログラマのためのモナド入門 Web本
+
+https://kentutorialbook.github.io/30minLearningJavaScriptMonad/
